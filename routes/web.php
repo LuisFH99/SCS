@@ -21,9 +21,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('users', UserController::class);
 
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->name('reportes');
 Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::view('home', 'livewire.dependencias.index')->name('home');
+Route::view('dependencia/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
+
