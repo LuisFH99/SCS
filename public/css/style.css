@@ -1,0 +1,283 @@
+/* estilos para la modulo asistencia */
+
+.fondo-cards {
+    background-color: #e6e7e9;
+}
+
+.fondo-table {
+    background-color: #003260;
+}
+
+.fondo-table th {
+    color: #ffff;
+    text-align: center;
+    font-weight: normal;
+}
+
+.fondo-table td {
+    color: #ffff;
+    text-align: center;
+}
+
+.bg-tr {
+    background-color: #b4b6bc;
+    color: #ffff;
+}
+
+.titulo_pregunta_1 {
+    /* font-family: Quicksand; */
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 19px;
+    color: #03529c;
+}
+
+.checkbox-custom {
+    position: relative;
+}
+
+.checkbox-custom input[type=checkbox] {
+    display: none;
+}
+
+.checkbox-custom input[type=checkbox]~b {
+    cursor: pointer;
+    outline: 0;
+    position: relative;
+    display: inline-block;
+    margin: -4px 1px 0;
+    background-color: #ffffff;
+    border: 1px solid #F49C24;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    line-height: 1;
+    text-align: center;
+    font-size: 20px;
+    color: #F49C24;
+    border-radius: 5px;
+}
+
+.checkbox-custom input[type=checkbox]:checked~b:after {
+    content: '\2713';
+    color: #28AECE;
+}
+
+.opcional {
+    font-style: italic;
+    color: red;
+    font-size: 11px;
+}
+
+#divEntrada .foto,
+#divEntrada .camara {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fa-camera {
+    color: rgb(8, 51, 179);
+    margin-left: 5px;
+    font-size: 20px;
+    ;
+}
+
+#tituloModal {
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* Fin estilos para la modulo asistencia */
+
+.dropdown-menu {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.scroll-3a {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.scroll-3b {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.dr {
+    float: right;
+    font-weight: bold;
+}
+
+.c {
+    float: center;
+    font-weight: bold;
+}
+
+.d {
+    float: right;
+}
+
+.anc {
+    width: 100%;
+}
+
+.centrado {
+    margin: 10px auto;
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+
+.centa {
+    margin: 5px auto;
+    display: block;
+    width: 10px;
+    height: 10px;
+}
+
+
+/* estilos modulo Docentes */
+
+#tableDocentes thead {
+    background-color: #003E78;
+    font-size: 14px;
+    text-align: center;
+}
+
+#tableDocentes tbody {
+    font-size: 13px;
+}
+
+#tableDocentes tbody td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tableDocentes .fa-user-edit {
+    color: rgb(8, 51, 179);
+}
+
+#tableDocentes .fa-calendar-alt {
+    color: rgb(8, 51, 179);
+}
+
+#tableDocentes .fa-trash-alt {
+    color: rgb(236, 48, 48);
+}
+
+
+/* Fin estilos modulo Docentes */
+
+
+/* Estilos modulo URCT-RRHH */
+
+#tableURCT thead {
+    background-color: #003E78;
+    font-size: 16px;
+    text-align: center;
+}
+
+#tableURCT tbody {
+    font-size: 14px;
+}
+
+#tableURCT tbody td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tableURCT .fa-address-book {
+    color: rgb(7, 47, 133);
+    font-size: 17px;
+}
+
+#tableURCT .fa-calendar-alt {
+    color: #272971;
+    font-size: 17px;
+}
+
+
+/* Fin Estilos modulo URCT-RRHH */
+
+
+/* Estilos modulo Asignar Dias Laborles */
+
+#cargos thead {
+    background-color: #003260;
+    text-align: center;
+}
+
+#cargos .fa-clipboard-check {
+    color: #003E78;
+    font-size: 18px;
+}
+
+#cargos .fa-trash-alt {
+    color: #ED3237;
+}
+
+.fa-backspace {
+    color: #ED3237;
+    font-size: 35px;
+}
+
+#divEntrada .foto,
+#divEntrada .camara {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fa-camera {
+    color: rgb(8, 51, 179);
+    margin-left: 5px;
+    font-size: 20px;
+    ;
+}
+
+.dangerito {
+    color: rgb(231, 43, 43);
+}
+
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+}
+
+.single-line {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre;
+}
+
+.sammy-wrap {
+    border-radius: 6px;
+    background-color: aliceblue;
+    border: 2px dashed gray;
+    max-width: 70%;
+    padding: 1em;
+    margin-bottom: .4em;
+}
+
+.alicb {
+    vertical-align: -2px;
+}
+
+.btn {
+    padding: 0.775rem 0.75rem !important;
+    /*0.375rem 0.75rem o ine..*/
+    margin: 0.1rem !important;
+    /* line-height: 0.2 !important;
+    text-align: center !important; */
+}
+
+
+/*
+.nav-link {
+    background-color: #75757521 !important;
+}*/

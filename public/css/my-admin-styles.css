@@ -1,0 +1,123 @@
+/*===============================
+=            General            =
+===============================*/
+
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700&display=swap');
+* {
+    font-family: 'Alegreya Sans', sans-serif;
+}
+
+
+/*=====  End of General  ======*/
+
+
+/*=============================
+=            Login            =
+=============================*/
+
+.login-body {
+    background-image: url(../../images/fondo-login.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.login-card {
+    position: relative;
+    max-width: 25rem;
+}
+
+.login-card .card-header h1,
+.login-card .card-header p {}
+
+.login-card .card-header h1 {
+    margin-top: 10px;
+    font-size: 30px !important;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login-card .card-header p {
+    margin: 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.login-card .card-body .input-group-prepend span {
+    background: #f6f6f6;
+}
+
+.login-card .card-footer {
+    background: #f6f6f6;
+}
+
+.login-card .card-footer a {
+    font-size: 14px !important;
+}
+
+.login-card i {
+    color: #094c8a;
+}
+
+
+/*=====  End of Login  ======*/
+
+
+/*==============================
+=            Footer            =
+==============================*/
+
+footer {
+    padding: 20px 0px;
+    text-align: center;
+    font-size: 16px;
+    background: #f6f6f6;
+}
+
+footer p,
+footer a {
+    margin: 0px;
+    color: #404040 !important;
+}
+
+footer a {
+    text-decoration: none !important;
+    -webkit-transition: color 0.5s ease-in-out 0s !important;
+    -moz-transition: color 0.5s ease-in-out 0s !important;
+    -ms-transition: color 0.5s ease-in-out 0s !important;
+    transition: color 0.5s ease-in-out 0s !important;
+}
+
+footer a:hover {
+    font-style: italic;
+    color: #094c8a !important;
+}
+
+
+/*=====  End of Footer  ======*/
+
+
+/*===========================
+=            Nav            =
+===========================*/
+
+.logout-button {
+    color: #fff !important;
+}
+
+
+/*=====  End of Nav  ======*/
+
+.treeview-animated .treeview-animated-list .treeview-animated-items .open {
+    background-color: #00a2ff !important;
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
+
+.btn {
+    padding: 0.775rem 0.75rem !important;
+    /*0.375rem 0.75rem o ine..*/
+    margin: 0.1rem !important;
+    line-height: 0.2 !important;
+    text-align: center !important;
+}
