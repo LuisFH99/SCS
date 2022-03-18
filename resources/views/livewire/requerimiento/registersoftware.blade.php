@@ -3,15 +3,15 @@
         <h3 class="card-title col-10"><i class="fab fa-uncharted mr-1"></i>
             <strong>Lista de Softwares</strong></h3>
             
-        <button type="button" class="btn btn-primary btn-sm col-2" wire:click="modocrear">
+        <button type="button" class="btn btn-primary btn-sm col-2" wire:click="crearsoftware">
             <i class="fas fa-plus mr-2"></i> Agregar
         </button>
 </div>
 
 <!-- Modal -->
-<div class="{{ $abrirmodal ? 'modal fade show' : 'modal fade' }}" id="exampleModal" tabindex="-1"
+<div class="{{ $abrirmodal2 ? 'modal fade show' : 'modal fade' }}" id="exampleModal" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true"
-    style=" {{ $abrirmodal ? 'display: block;' : 'display: none' }}" aria-modal="{{ $abrirmodal ? 'true' : '' }}"
+    style=" {{ $abrirmodal2 ? 'display: block;' : 'display: none' }}" aria-modal="{{ $abrirmodal2 ? 'true' : '' }}"
     role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -42,6 +42,6 @@
         </div>
     </div>
 </div>
-@if ($abrirmodal)
+@if ($abrirmodal2)
     <div class="modal-backdrop fade show"></div>
 @endif

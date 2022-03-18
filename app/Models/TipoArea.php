@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subentidad extends Model
+class TipoArea extends Model
 {
     use HasFactory;
-    protected $table = 'subentidad';
     protected $fillable=[
         'id',
-        'nombre',
-        'estado',
-        'entidad_id',
+        'nom_tip',
     ];
-    public $timestamps = false;
-    
+    protected $table = 'tipo';
 }

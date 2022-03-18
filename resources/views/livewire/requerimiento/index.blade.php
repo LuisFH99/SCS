@@ -30,7 +30,43 @@
 
 @section('js')
     <script src="{{ asset('js/cute-alert.js') }}"></script>
-    <script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Livewire.on('confirmEliminarArea', areaId=>{
+                cuteAlert({
+                type: "question",
+                title: "Mensaje de Sistema",
+                img: "question.svg",
+                message: "¿Esta seguro de eliminar el area?",
+                confirmText: "SI",
+                cancelText: "NO"
+                }).then((e)=>{
+                    console.log(e)
+                if ( e == ("confirm")){
+                    Livewire.emitTo('requerimiento','eliminararea',areaId)
+                } else {
+                    console.log('No confirmo');
+                }
+                })
+            });
+            Livewire.on('confirmEliminarSoftware', softwareId=>{
+                cuteAlert({
+                type: "question",
+                title: "Mensaje de Sistema",
+                img: "question.svg",
+                message: "¿Esta seguro de eliminar el software del requerimiento?",
+                confirmText: "SI",
+                cancelText: "NO"
+                }).then((e)=>{
+                    console.log(e)
+                if ( e == ("confirm")){
+                    Livewire.emitTo('requerimiento','eliminarsoftware',softwareId)
+                } else {
+                    console.log('No confirmo');
+                }
+                })
+            });
+        });
         function SoloNumeros(e) {
            var key = Window.Event ? e.which : e.keyCode;
            if (key < 48 || key > 57) {
