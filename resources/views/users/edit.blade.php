@@ -49,6 +49,8 @@
     <!-- MDB -->
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet"/> --}}
     @toastr_css
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @stop
 
 @section('js')
@@ -57,4 +59,16 @@
     @toastr_js
     <!-- MDB -->
     {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+        function SoloNumeros(e){
+            var key= Window.Event? e.which : e.keyCode;
+            if (key < 48 || key > 57) { 
+                e.preventDefault();
+            }
+        };
+    </script>
 @stop
