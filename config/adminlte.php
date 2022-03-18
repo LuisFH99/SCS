@@ -256,11 +256,21 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
+            'text'        => 'Gestion de Usuarios',
+            'url'         => '/users',
+            'icon'        => 'fas fa-fw fa-users fa-spin',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
+        ],
+        [
+            'text'        => 'Requerimientos',
+            'url'         => '/home',
+            'icon'        => 'fa fa-cog fa-spin fa-fw',
+        ],
+        [
+            'text'        => 'Reportes',
+            'url'         => '/reportes',
+            'icon'        => 'far fa-fw fa-file fa-spin',
         ],
         ['header' => 'account_settings'],
         [

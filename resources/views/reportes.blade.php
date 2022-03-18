@@ -46,7 +46,6 @@
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <link rel="stylesheet" href="/css/style.css">
-
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
     <!-- Google Fonts -->
@@ -58,12 +57,6 @@
 @stop
 
 @section('js')
-    <!-- Sweet Alert -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @toastr_js
-    @toastr_render
-    <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -76,10 +69,9 @@
                     _token: $('input[name="_token"]').val(),
                     id: idE
                 }
-            }).done(function(url) {
-                console.log('correcto: ' + url);
-                var entidad='juana';
-                selectId1(entidad,tipo,url);
+            }).done(function(dato) {
+                console.log('correcto: '+ dato.entidad +' - '+ dato.url);
+                selectId1(dato.entidad,tipo,dato.url);
             }).fail(function(msg) {
                 console.log(msg);
                 Swal.fire({
