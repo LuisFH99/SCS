@@ -113,7 +113,6 @@ class UserController extends Controller
         $tipo=tipo_entidad::get();
         $entidades1 = entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
-        return view('users.create', compact('roles','entidades','entidades1','tipo'));
         return view('users.edit', compact('user', 'roles','encargado','tipo_entidad','entidades','entidades1','tipo'));
     }
 
