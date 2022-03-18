@@ -241,6 +241,15 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
+
+        [
+            'text' => 'Dependencia',
+            
+            'icon'  => 'nav-icon fa fa-sitemap',
+            'route'  => 'home',
+            
+        ],
+
         [
             'text' => 'blog',
             'url'  => 'admin/blog',
