@@ -4,7 +4,7 @@
 
 
 @section('content')
-    <livewire:dependencias />
+    <livewire:entidades />
 @stop
 
 @section('css')

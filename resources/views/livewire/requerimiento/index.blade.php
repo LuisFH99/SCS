@@ -11,10 +11,10 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('home') }}">
                         <i class="fas fa-fw fa-arrow-left"></i>
-                        Dependencias
+                        Entidad
                     </a>
                 </li>
-                <li class="breadcrumb-item active">Registrar</li>
+                <li class="breadcrumb-item active">Registro de Requerimiento</li>
             </ol>
         </div>
     </div>
@@ -32,35 +32,35 @@
     <script src="{{ asset('js/cute-alert.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            Livewire.on('confirmEliminarArea', areaId=>{
+            Livewire.on('confirmValidaRequerimiento', subentidadId=>{
                 cuteAlert({
                 type: "question",
                 title: "Mensaje de Sistema",
                 img: "question.svg",
-                message: "¿Esta seguro de eliminar el area?",
+                message: "Si valida el requerimiento no podra volver a editar ¿Esta seguro de Validar el Requerimiento?",
                 confirmText: "SI",
                 cancelText: "NO"
                 }).then((e)=>{
                     console.log(e)
                 if ( e == ("confirm")){
-                    Livewire.emitTo('requerimiento','eliminararea',areaId)
+                    Livewire.emitTo('requerimiento','validarequerimiento',subentidadId)
                 } else {
                     console.log('No confirmo');
                 }
                 })
             });
-            Livewire.on('confirmEliminarSoftware', softwareId=>{
+            Livewire.on('confirmQuitarSoftware', requerimientoId=>{
                 cuteAlert({
                 type: "question",
                 title: "Mensaje de Sistema",
                 img: "question.svg",
-                message: "¿Esta seguro de eliminar el software del requerimiento?",
+                message: "¿Esta seguro de quitar el software del requerimiento?",
                 confirmText: "SI",
                 cancelText: "NO"
                 }).then((e)=>{
                     console.log(e)
                 if ( e == ("confirm")){
-                    Livewire.emitTo('requerimiento','eliminarsoftware',softwareId)
+                    Livewire.emitTo('requerimiento','quitarsoftware',requerimientoId)
                 } else {
                     console.log('No confirmo');
                 }

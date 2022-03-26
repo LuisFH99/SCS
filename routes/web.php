@@ -29,6 +29,6 @@ Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])-
 Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::view('home', 'livewire.dependencias.index')->name('home');
-Route::view('dependencia/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
+Route::view('home', 'livewire.entidades.index')->name('home');
+Route::view('entidad/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
 

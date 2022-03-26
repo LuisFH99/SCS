@@ -243,7 +243,7 @@ return [
         ],
 
         [
-            'text' => 'Dependencia',
+            'text' => 'Entidad',
             
             'icon'  => 'nav-icon fa fa-sitemap',
             'route'  => 'home',

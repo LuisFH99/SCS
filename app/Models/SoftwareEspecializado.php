@@ -19,6 +19,7 @@ class SoftwareEspecializado extends Model
         'tipo_licencia_id',
     ];
     public $timestamps = false;
+    
     public function tiposoftware()
     {
         return $this->belongsTo(TipoLicencia::class,'tipo_licencia_id','id');
