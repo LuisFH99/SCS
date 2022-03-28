@@ -56,13 +56,7 @@ class HomeController extends Controller
                 ->select('encargado.*','nombre','tipo')->where('entidad.id',$request->id)->first();
             $subEnts=subentidad::where('entidad_id',$encargados->entidad_id)->get();
             $tipos=DB::table('tipo')->get();
-            $areas=area::join('subentidad','area.subentidad_id','subentidad.id')
-                            ->join('entidad','subentidad.entidad_id','entidad.id')
-                            ->join('tipo','area.tipo_id','tipo.id')
-                            ->select('entidad.nombre as entidad','subentidad.nombre as sub','nom_tip','area.*')
-                            ->where('entidad_id',$encargados->entidad_id)->get();
-            $labs=area::join('subentidad','area.subentidad_id','subentidad.id')
-                            ->join('tipo','area.tipo_id','tipo.id')
+            $labs=subentidad::join('tipo','subentidad.tipo_id','tipo.id')
                             ->select('nom_tip')
                             ->where('entidad_id',$encargados->entidad_id)->groupBy('nom_tip')->get();
             $detalles=DetalleSoftware::join('subentidad','detalle_software.subentidad_id','subentidad.id')
@@ -70,11 +64,11 @@ class HomeController extends Controller
                                         ->join('sft_especializado','detalle_software.sft_especializado_id','sft_especializado.id')
                                         ->select('detalle_software.*','entidad.nombre as enti','subentidad.nombre as subenti',
                                                 'sft_especializado.nombre','sft_especializado.nombre as sft_nom', 
-                                                'sft_especializado.año as anio', 'version', 'caracteristicas', 'tipo_licencia_id')
+                                                'sft_especializado.año as anio', 'version', 'tipo_licencia_id')
                                         ->where('entidad.id',$encargados->entidad_id)->get();
             $sftGenerales=DB::table('sft_predeterminado')->get();
             $url='pdfs/'.$fecha->nombre.' - '.$fecha->fech.'.pdf';
-            $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('encargados','subEnts','areas','tipos','labs','detalles','sftGenerales'));
+            $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('encargados','subEnts','tipos','labs','detalles','sftGenerales'));
             $pdf->save($url);
             $entidad=$encargados->nombre;
             $url='/'.$url;

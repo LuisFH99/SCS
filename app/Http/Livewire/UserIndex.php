@@ -7,6 +7,7 @@ use App\Models\User;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+
 class UserIndex extends Component
 {
     use WithPagination;

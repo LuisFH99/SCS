@@ -53,6 +53,9 @@
         .cap {
             padding: 0.3em;
         }
+        .anc-1{
+            width:250px;
+        }
         /** 
                 Establezca los márgenes de la página en 0, por lo que el pie de página y el encabezado
                 puede ser de altura y anchura completas.
@@ -103,43 +106,16 @@
             <h1 class="titulo">Centro de Costo</h1>
             <h3 class="titulo">{{$encargados->nombre}}</h3><br>
             <div>
-                <p>CARRERAS PROFESIONALES: <b>{{$subEnts->count()-1}}</b></p>
-                <p>N° LABORATORIOS: <b>{{$areas->count()}}</p>  
+                <p>Sub Entidades: <b>{{$subEnts->count()-1}}</b></p>
             </div>
             <div name="divDETALLE">
                 @php
-                    $cont=1; 
+                    $cont=1;$cantidadPC=0; $totalEnt=0.00;
                 @endphp
                 @foreach ($subEnts as $subEnt)
-                    <p>0{{$cont++}} - <b>{{$subEnt->nombre}}</b></p>
-                    <table class="titulo">
-                        <tbody>
-                            <tr>
-                                @if (($areas->count()) > ($cont-1))
-                                    <th>{{$labs[0]->nom_tip}}: </th>
-                                @endif
-                                @if (($areas->count()) == ($cont-1))
-                                    <th>{{$labs[1]->nom_tip}}: </th>
-                                @endif
-                                @foreach ($areas as $area)
-                                    @if ($subEnt->nombre==$area->sub)
-                                        <td>{{$area->codigo}}</td>
-                                    @endif
-                                @endforeach
-                            </tr>
-                            <tr>
-                                @php
-                                    $cantidadPC=0;
-                                @endphp
-                                <th>N° PCs: </th>
-                                @foreach ($areas as $area)
-                                @if ($subEnt->nombre==$area->sub)<td>{{$area->num_pc}}@php
-                                    $cantidadPC=$cantidadPC+$area->num_pc;
-                                @endphp</td>@endif
-                                @endforeach
-                            </tr>
-                        </tbody>
-                    </table>
+                    <p>0{{$cont++}} - <b>{{strtoupper($subEnt->nombre)}}</b></p>
+                    <p>N° PCs: <b>{{$subEnt->num_pc}}</b></p>
+                    @php $cantidadPC=$cantidadPC+$subEnt->num_pc; @endphp
                     <p><b>Observaciones: </b>___________________________________</p>
                     <h4 class="titulo" >Detalle de las peticiones de Software de {{$subEnt->nombre}}</h4>
                     <table class="tab">
@@ -154,7 +130,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
                                 @php
                                     $cont1=1; $total=0.00;$subtotal=0.00;
                                 @endphp
@@ -162,12 +137,12 @@
                                     <tr>
                                         <td class="titulo the">{{$cont1++}}</td>
                                         <td class="the">{{$sftGeneral->nombre}}</td>
-                                        <td class="titulo the">{{$cantidadPC}}</td>
-                                        <td class="the"><a class="dis-in" href="#">Cotizacion Adjunta</a></td>
+                                        <td class="titulo the">{{$subEnt->num_pc}}</td>
+                                        <td class="the"><a class="dis-in" href="#"></a></td>
                                         <td class="right the">{{$sftGeneral->precio_referencial}}</td>@php
-                                            $subtotal=$cantidadPC*$sftGeneral->precio_referencial;
+                                            $subtotal=$subEnt->num_pc*$sftGeneral->precio_referencial;
                                         @endphp
-                                        <td class="right the">{{$subtotal}}</td>@php
+                                        <td class="right the">{{number_format($subtotal,2)}}</td>@php
                                             $total=$total+$subtotal;
                                         @endphp
                                     </tr>
@@ -178,37 +153,41 @@
                                             <td class="titulo the">{{$cont1++}}</td>
                                             <td class="the">{{$detalle->nombre}}</td>
                                             <td class="titulo the">{{$detalle->cantidad}}</td>
-                                            <td class="the"><a class="dis-in" href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}">Cotizacion Adjunta</a></td>
+                                            <td class="the"><a class="dis-in" 
+                                                href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}">
+                                                {{(!is_null($detalle->cotizacion)?'Ver Cotización':'')}}</a></td>
                                             <td class="right the">{{$detalle->precio_referencial}}</td>@php
                                                 $subtotal=$detalle->cantidad*$detalle->precio_referencial;
                                             @endphp
-                                            <td class="right the">{{$subtotal}}</td>@php
+                                            <td class="right the">{{number_format($subtotal,2)}}</td>@php
                                                 $total=$total+$subtotal;
                                             @endphp
                                         </tr>   
                                     @endif
                                 @endforeach 
-                            
                         </tbody>
                         <tfoot>
                             <tr> 
                                 <th class="right the" colspan="5">Total  </th>
-                                <td class="right the">{{$total}}</td>
+                                <td class="right the">{{number_format($total,2)}}</td>
+                                @php
+                                    $totalEnt=$totalEnt+$total;
+                                @endphp
                             </tr>
                         </tfoot>
-                    </table>
+                    </table><br><br>
                 @endforeach
-            </div><br><br>
+            </div>
+            <div>
+                <p><b>Total</b> de gasto de la <b>{{$encargados->nombre}}</b> es de <b>S/. {{number_format($totalEnt,2)}}</b></p>
+            </div>
+            <br><br>
             <div class="Row titulo">
                 <div class="Column titulo">
                     <p class="titulo dis-in">________________________________________</p><br>
                     <p class="titulo dis-in"><b>{{strtoupper($encargados->nombres.' '.$encargados->apell_pat.' '.$encargados->apell_mat)}}</b></p><br>
-                    <p class="titulo dis-in">DNI N° <b>{{$encargados->DNI}}</b></p>
-                </div>
-                <div class="Column titulo">
-                    <p class="titulo dis-in">________________________________________</p><br>
-                    <p class="titulo dis-in"><b>{{strtoupper('OGTISE')}}</b></p><br>
-                    <p class="titulo dis-in">DNI N° <b>{{'85231472'}}</b></p>
+                    <p class="titulo dis-in">DNI N° <b>{{$encargados->DNI}}</b></p><br>
+                    <div class="Column titulo dis-in anc-1"><p class="titulo dis-in">{{strtoupper('Encargado de la '.$encargados->nombre)}}</p><br></div>
                 </div>
             </div>
         </div>
