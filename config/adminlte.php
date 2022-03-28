@@ -269,6 +269,13 @@ return [
             'icon'        => 'far fa-fw fa-file',
      
         ],
+
+        [
+            'text'        => 'Lista Entidades',
+            'route'         => 'admin.entidades.index',
+            'icon'        => 'nav-icon fas fa-th',
+     
+        ],
         
     ],
 
