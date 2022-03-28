@@ -16,4 +16,8 @@ class Entidad extends Model
         return $this->hasMany(Subentidad::class,'entidad_id','id');
 
     }
+    public function tipoentidad()
+    {
+        return $this->belongsTo(tipo_entidad::class,'tipo_entidad_id','id');
+    }
 }

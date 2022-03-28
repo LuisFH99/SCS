@@ -243,7 +243,7 @@ return [
         ],
 
         [
-            'text' => 'Dependencia',
+            'text' => 'Entidad',
             
             'icon'  => 'nav-icon fa fa-sitemap',
             'route'  => 'home',
@@ -267,6 +267,13 @@ return [
             'text'        => 'Reportes',
             'url'         => '/reportes',
             'icon'        => 'far fa-fw fa-file',
+     
+        ],
+
+        [
+            'text'        => 'Lista Entidades',
+            'route'         => 'admin.entidades.index',
+            'icon'        => 'nav-icon fas fa-th',
      
         ],
         

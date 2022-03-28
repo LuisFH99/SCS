@@ -30,7 +30,10 @@ Route::resource('softwares', SoftwareController::class);
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->name('reportes');
 Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Encargado
+Route::view('home', 'livewire.entidades.index')->name('home');
+Route::view('entidad/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
+//admin
+Route::view('entidades', 'livewire.admin.entidades.index')->name('admin.entidades.index');
 
-Route::view('home', 'livewire.dependencias.index')->name('home');
-Route::view('dependencia/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
 

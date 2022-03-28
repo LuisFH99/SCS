@@ -3,13 +3,16 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Area;
+
 use App\Models\SoftwarePredeterminado;
 use App\Models\SoftwareEspecializado;
 use App\Models\DetalleSoftware;
 use App\Models\TipoLicencia;
 use App\Models\TipoArea;
 use App\Models\Subentidad;
+use App\Models\DetalleTipoLicencia;
+use App\Models\DetallePeriodicidad;
+use App\Models\DetalleRequerimiento;
 
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
@@ -21,20 +24,18 @@ class Requerimiento extends Component
     use WithFileUploads;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $codigo, $numpc,$software,$año,$version,$tipolc,$descripcion;
-    public $precio,$observacion,$cotizacion,$cantidad,$nombresf,$id_software;
-    public $abrirmodal=false;
-    public $totalpc,$tipoarea,$buscar;
-    public $creararea=true;
+    public $codigo, $numpc,$software,$año,$version,$descripcion;
+    public $precio,$observacion,$cotizacion,$cantidad,$tipolc,$periodo,$nombresf,$id_software;
+
+    public $licencias,$periodos;
+    public $buscar;
     public $verarea=true;
     public $versoftware=false;
     public $verreq=false;
     public $id_subentidad;
-    protected $listeners = ['eliminararea','eliminarsoftware'];
+    protected $listeners = ['validarequerimiento','quitarsoftware'];
 
-    protected $rulesArea=[
-        'tipoarea'=>'required',
-        'codigo'=>'required',
+    protected $rulesSubentidad=[
         'numpc'=>'required|integer',
     ];
     protected $rulesSoftware=[
@@ -46,11 +47,14 @@ class Requerimiento extends Component
     ];
     protected $rulesRequerimiento=[
         'precio'=>'required|numeric|between:0.01,9999999.99',
+        'cantidad'=>'required|numeric',
+        'tipolc'=>'required',
+        'periodo'=>'required',
+        'cotizacion'=>'required',
         'id_software'=>'required',
+        
     ];
     protected $msjError=[
-        'tipoarea.required'=>'El campo Tipo de Area es obligatorio',
-        'codigo.required'=>'El campo Codigo es obligatorio',
         'numpc.required'=>'El campo Numero de PCs es obligtorio',
         'numpc.integer'=>'El campo Numero de PCs debe ser numérico',
         'software.required'=>'Debe indicar el Nombre del Software',
@@ -62,7 +66,12 @@ class Requerimiento extends Component
         'precio.required'=>'El campo Precio Referencial es obligatorio',
         'precio.numeric'=>'El campo Precio Referencial debe ser numérico',
         'precio.between'=>'El campo Precio Referencial debe ser un precio válido',
-        'id_software.required'=>'Debe seleccionar un Software.'
+        'cantidad.required'=>'El campo Cantidad es obligatorio',
+        'cantidad.numeric'=>'El campo Cantidad debe ser numérico',
+        'tipolc.required'=>'El campo Tipo de Licencia es obligatorio',
+        'periodo.required'=>'El campo Periodo es obligatorio',
+        'cotizacion.required'=>'La cotizacion es obligatoria',
+        'id_software.required'=>'Debe seleccionar un Software del catalogo'
     ];
 
     public function mount()
@@ -72,15 +81,13 @@ class Requerimiento extends Component
 
     public function render()
     {
-        $this->totalpc=Area::where('subentidad_id',$this->id_subentidad)->sum('num_pc');;
-        $areas=Area::where('subentidad_id',$this->id_subentidad)->get();
+        $subentidad=Subentidad::where('id',$this->id_subentidad)->first();
+           
         $sftpredeterminado=SoftwarePredeterminado::all();
         $sftespecializado=SoftwareEspecializado::where('nombre','like','%'.$this->buscar.'%')->orderBy('id', 'desc')->paginate(10);
-        
-        $requerimientos=DetalleSoftware::where('subentidad_id',$this->id_subentidad)->get();
+        $requerimientos=DetalleRequerimiento::where('subentidad_id',$this->id_subentidad)->get();
         $tipolicencias=TipoLicencia::all();
-        $tipoareas=TipoArea::all();
-        return view('livewire.requerimiento.view',compact('areas','sftpredeterminado','sftespecializado','requerimientos','tipolicencias','tipoareas'));
+        return view('livewire.requerimiento.view',compact('subentidad','sftpredeterminado','sftespecializado','requerimientos','tipolicencias'));
     }
 
     public function limpiar()
@@ -97,20 +104,11 @@ class Requerimiento extends Component
         $this->cotizacion=null;
         $this->nombresf=null;
         $this->id_software=null;
-        $this->tipoarea=1;
+        $this->periodo=null;
+        $this->cantidad=null;
     }
 
-    public function creararea()
-    {
-        $this->abrirmodal=true;
-        $this->creararea=true;
-    }
-    
-    public function crearsoftware()
-    {
-        $this->abrirmodal=true;
-        $this->creararea=false;
-    }
+
     public function area()
     {
         $this->verarea=true;
@@ -133,114 +131,88 @@ class Requerimiento extends Component
     
     public function cancel()
     {
-        $this->abrirmodal=false;
         $this->limpiar();
     }
 
     public function seleccion($id)
     {
         $sfe = SoftwareEspecializado::find($id);
+
         $this->nombresf=$sfe->nombre;
+        $this->licencias=DetalleTipoLicencia::where('sft_especializado_id',$id)->get();
+        $this->periodos=DetallePeriodicidad::where('sft_especializado_id',$id)->get();
         $this->id_software=$id;
         $this->creararea=false;
+        $datos = [
+            'modo' => 'bg-success',
+            'mensaje' => 'Software seleccionado.'
+        ];
+        $this->emit('alertaArea', $datos);
     }
 
-    public function storeArea()
+    public function GuardarPc()
     {
-        
-        if($this->creararea){
-            $this->validate($this->rulesArea,$this->msjError);
-            if(Area::where('codigo',$this->codigo)->where('subentidad_id',$this->id_subentidad)->doesntExist()){
-                $creado = Area::create([
-                    'codigo' => $this->codigo,
-                    'num_pc' => $this->numpc,
-                    'tipo_id' => $this->tipoarea,
-                    'subentidad_id' => $this->id_subentidad
-                ]);
-                
-                if (isset($creado)) {
-                    if(!(DetalleSoftware::where('subentidad_id',$this->id_subentidad)->doesntExist())){
-                        DetalleSoftware::where('subentidad_id',$this->id_subentidad)->update(['cantidad' => ($this->totalpc+$this->numpc)]);
-                    }
-                    
-                    $datos = [
-                        'modo' => 'bg-success',
-                        'mensaje' => 'Registro creada satisfactoriamente.'
-                    ];
-                    $this->limpiar();
-                    $this->abrirmodal = false;
-                } else {
-                    $datos = [
-                        'modo' => 'bg-danger',
-                        'mensaje' => 'Error! No se creo el registro.'
-                    ];
-                }
-
-            }else{
-                $datos = [
-                    'modo' => 'bg-warning',
-                    'mensaje' => 'El area ya se encuetra Registrado.'
-                ];
-
-            }
+        $this->validate($this->rulesSubentidad,$this->msjError);
+        // $=Subentidad::where('id',$this->id_subentidad)->value('num_pc');
+        if(DetalleRequerimiento::where('subentidad_id',$this->id_subentidad)->doesntExist()){
+            Subentidad::where('id', $this->id_subentidad)->update(['num_pc' => $this->numpc]);
+            $datos = [
+                'modo' => 'bg-success',
+                'mensaje' => 'Registro Actualizado con Exito.'
+            ];
         }else{
-            $this->validate($this->rulesSoftware,$this->msjError);
-            $sfcreado = SoftwareEspecializado::create([
-                'nombre' => $this->software,
-                'año' => $this->año,
-                'version' => $this->version,
-                'caracteristicas' => $this->descripcion,
-                'tipo_licencia_id'=> $this->tipolc
-            ]);
-            if (isset($sfcreado)) {
-                $datos = [
-                    'modo' => 'bg-success',
-                    'mensaje' => 'Registro creada satisfactoriamente.'
-                ];
-                $this->limpiar();
-                $this->abrirmodal = false;
-            } else {
-                $datos = [
-                    'modo' => 'bg-danger',
-                    'mensaje' => 'Error! No se creo el registro.'
-                ];
-            }
-                        
+            $datos = [
+                'modo' => 'bg-warning',
+                'mensaje' => 'No se puede Modificar, Ya existen 
+                Requerimientos Registrados.'
+            ];
         }
-        
+        $this->limpiar();
         $this->emit('alertaArea', $datos);
     }
 
     public function registrar()
     {
         $this->validate($this->rulesRequerimiento,$this->msjError);
-        if(DetalleSoftware::where('sft_especializado_id',$this->id_software)->where('subentidad_id',$this->id_subentidad)->doesntExist()){
-            if (is_null($this->cotizacion)) {
-                $url = null;
-            } else {
+        $numpcregistrado=Subentidad::where('id',$this->id_subentidad)->value('num_pc');
+        if(DetalleRequerimiento::where('det_tipo_licencia_id',$this->tipolc)->where('subentidad_id',$this->id_subentidad)->doesntExist()){
+            if(($this->cantidad) <= ($numpcregistrado)){
+
+                // $name = date('d-m-Y_H-i-s') . '_' . $this->cotizacion->getClientOriginalName();
+                // $this->cotizacion->move('cotizaciones', $name);
+                // $url="public/cotizaciones/".$name;
+            
                 $archivo = $this->cotizacion->store('public/cotizaciones');
                 $url = Storage::url($archivo);
-            }
-            $creado = DetalleSoftware::create([
-                'precio_referencial' => $this->precio,
-                'cotizacion' => $url,
-                'observacion' => $this->observacion,
-                'cantidad' => $this->totalpc,
-                'sft_especializado_id' => $this->id_software,
-                'subentidad_id' => $this->id_subentidad
-            ]);
-            if (isset($creado)) {
+                
+                $creado = DetalleRequerimiento::create([
+                    'precio_referencial' => $this->precio,
+                    'cotizacion' => $url,
+                    'observacion' => $this->observacion,
+                    'cantidad' => $this->cantidad,
+                    'subentidad_id' => $this->id_subentidad,
+                    'det_tipo_licencia_id' => $this->tipolc,
+                    'det_periodicidad_id' => $this->periodo,
+                ]);
+                if (isset($creado)) {
+                    $datos = [
+                        'modo' => 'bg-success',
+                        'mensaje' => 'Registro creada satisfactoriamente.'
+                    ];
+                    $this->limpiar();
+                } else {
+                    $datos = [
+                        'modo' => 'bg-danger',
+                        'mensaje' => 'Error! No se creo el registro.'
+                    ];
+                }
+            }else{
                 $datos = [
-                    'modo' => 'bg-success',
-                    'mensaje' => 'Registro creada satisfactoriamente.'
-                ];
-                $this->limpiar();
-            } else {
-                $datos = [
-                    'modo' => 'bg-danger',
-                    'mensaje' => 'Error! No se creo el registro.'
+                    'modo' => 'bg-warning',
+                    'mensaje' => 'La cantidad de licencias excede el numero de PCs'
                 ];
             }
+
         }else{
             $datos = [
                 'modo' => 'bg-warning',
@@ -253,43 +225,9 @@ class Requerimiento extends Component
 
     }
 
-    public function eliminararea($idarea)
+    public function quitarsoftware($idrequerimiento)
     {
-        if(DetalleSoftware::where('subentidad_id',$this->id_subentidad)->doesntExist())
-        {
-            Area::destroy($idarea);
-            $datos = [
-                'modo' => 'bg-success',
-                'mensaje' => 'Se elimino el registro del sistema.'
-            ];
-            
-        }else{
-            $dtoarea=Area::where('id',$idarea)->first();
-            Area::destroy($idarea);
-            if (($this->totalpc-$dtoarea->num_pc)==0) {
-                DetalleSoftware::where('subentidad_id',$this->id_subentidad)->delete();
-                $datos = [
-                    'modo' => 'bg-success',
-                    'mensaje' => 'Se elimino el registro del sistema.'
-                ];
-            } else {
-                
-                DetalleSoftware::where('subentidad_id',$this->id_subentidad)->update(['cantidad' => ($this->totalpc-$dtoarea->num_pc)]);
-                
-                $datos = [
-                    'modo' => 'bg-success',
-                    'mensaje' => 'Se elimino el registro del sistema.'
-                ];
-            }
-            
-            
-        }
-        $this->emit('alertaArea', $datos);
-    }
-
-    public function eliminarsoftware($idsoftware)
-    {
-        DetalleSoftware::destroy($idsoftware);
+        DetalleRequerimiento::destroy($idrequerimiento);
         $datos = [
             'modo' => 'bg-success',
             'mensaje' => 'Se elimino el Software del Requerimiento.'
@@ -297,7 +235,9 @@ class Requerimiento extends Component
         $this->emit('alertaArea', $datos);
     }
 
-    public function vistoBueno($id){
+    public function validarequerimiento($id)
+    {
+
         Subentidad::where('id',$id)->update(['estado' => 1]);
         $this->creararea=true;
         $datos = [

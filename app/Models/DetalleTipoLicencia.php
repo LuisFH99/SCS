@@ -5,21 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetalleSoftware extends Model
+class DetalleTipoLicencia extends Model
 {
     use HasFactory;
-    protected $table = 'detalle_software';
-    protected $fillable=[
-        'id',
-        'precio_referencial',
-        'cotizacion',
-        'observacion',
-        'cantidad',
-        'sft_especializado_id',
-        'subentidad_id',
-    ];
+    protected $table = 'det_tipo_licencia';
     public $timestamps = false;
 
+    public function tipolicencia()
+    {
+        return $this->belongsTo(TipoLicencia::class,'tipo_licencia_id','id');
+
+    }
     public function software()
     {
         return $this->belongsTo(SoftwareEspecializado::class,'sft_especializado_id','id');

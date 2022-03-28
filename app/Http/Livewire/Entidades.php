@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Encargado;
 use App\Models\Entidad;
 
-class Dependencias extends Component
+class Entidades extends Component
 {
     public $idencargado;
     public $identidad;
@@ -18,6 +18,6 @@ class Dependencias extends Component
     {
         $entidades = Entidad::where('id',$this->identidad)->get();
            
-        return view('livewire.dependencias.view',compact('entidades'));
+        return view('livewire.entidades.view',compact('entidades'));
     }
 }
