@@ -11,8 +11,9 @@ class SoftwareEspecializado extends Model
     protected $table = 'sft_especializado';
 
     protected $fillable=[
-         'nombre', 'año', 'version', 'precio_referencial', 'tipo_licencia_id', 'periodo_id'
+         'nombre', 'año', 'version'
     ];
+    
     public $timestamps = false;
     
     public function tiposoftware()

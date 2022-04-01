@@ -26,6 +26,7 @@ Auth::routes();
 
 Route::resource('users', UserController::class);
 Route::resource('softwares', SoftwareController::class);
+Route::get('/softwares/{software}/tipo/{tipo}', [App\Http\Controllers\SoftwareController::class, 'edit1'])->name('softwares.edit1');
 
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->name('reportes');
 Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');

@@ -65,11 +65,11 @@
                     let element = $(this)[0];
                     let id = $(element).attr('id');
                     $.ajax({
-                        url: "{{ url('users') }}" + '/' + id,
+                        url: "{{ url('softwares') }}" + '/' + id,
                         type: "POST",
                         data: {'_method': 'DELETE', '_token': csrf_token},
                         success: function(data) {
-                            alert(data);
+                            //alert(data);
                             location.reload();
                             //alert(data.id +' - '+ data.name +' - ' + data.email +' - ' + data.password );
                         },

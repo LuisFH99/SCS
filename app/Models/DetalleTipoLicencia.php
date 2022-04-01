@@ -10,7 +10,9 @@ class DetalleTipoLicencia extends Model
     use HasFactory;
     protected $table = 'det_tipo_licencia';
     public $timestamps = false;
-
+    protected $fillable=[
+        'tipo_licencia_id', 'sft_especializado_id',
+    ];
     public function tipolicencia()
     {
         return $this->belongsTo(TipoLicencia::class,'tipo_licencia_id','id');

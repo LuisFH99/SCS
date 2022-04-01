@@ -22,14 +22,13 @@
                             <th>Licencias</th>
                             <th>Periodos</th>
                             <th>Tipo</th>
-                            <th width="320px"></th>
+                            <th width="240px"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $aux=1;
                         @endphp
-                        <tr>hola</tr>
                         @foreach($softwares as $software)
                             <tr>
                                 <td>{{ $aux++; }}</td>
@@ -37,19 +36,40 @@
                                 <td>{{ $software->año }}</td>
                                 <td>{{ $software->version }}</td>
                                 <td>{{ $software->precio_referencial }}</td>
-                                <td>Por definir</td>
-                                <td>Por definir</td>
+                                <td>
+                                    @if ($software->tipo_licencia_id==0)
+                                        <ul>
+                                            @foreach ($tipoLicenciasDetalles as $tipoLicenciasDetalle)
+                                                @if ($tipoLicenciasDetalle->sft_especializado_id==$software->id&&$software->tipo_licencia_id==0)
+                                                    <li>{{$tipoLicenciasDetalle->tipo}}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        {{ $software->tipo_licencia_id }}
+                                    @endif
+                                    
+                                </td>
+                                <td>
+                                    @if ($software->periodo_id==0)
+                                        <ul>
+                                            @foreach ($periodicidadDetalles as $periodicidadDetalle)
+                                                @if ($periodicidadDetalle->sft_especializado_id==$software->id&&$software->periodo_id==0)
+                                                    <li>{{$periodicidadDetalle->periodo}}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        {{ $software->periodo_id }}
+                                    @endif
+                                </td>
                                 <td>{{ $software->tipo }}</td>
                                 <td>
-                                    <a href="{{ route('softwares.show', $software->id) }}" class="btn btn-dark">
-                                        <i class="fas fa-fw fa-eye"></i>
-                                        Ver
-                                    </a>
-                                    <a href="{{ route('softwares.edit', $software->id) }}" class="btn btn-primary">
+                                    <a href="{{ route('softwares.edit1', ['software' => $software->id,'tipo' => $software->tipo]) }}" class="btn btn-primary">
                                         <i class="fas fa-fw fa-edit"></i>
                                         Editar
                                     </a>
-                                    <button id="{{ $software->id }}" class="delete-button btn btn-danger">
+                                    <button id="{{ $software->id.'-'.$software->tipo }}" class="delete-button btn btn-danger">
                                         <i class="fas fa-fw fa-trash"></i>
                                         Eliminar
                                     </button>

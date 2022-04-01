@@ -9,7 +9,6 @@ class TipoLicencia extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'id',
         'tipo',
     ];
     protected $table = 'tipo_licencia';

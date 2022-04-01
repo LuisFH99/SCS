@@ -10,7 +10,9 @@ use App\Models\entidad;
 use App\Models\subentidad;
 use App\Models\area;
 use App\Models\tipo_entidad;
-use App\Models\DetalleSoftware;
+use App\Models\DetalleRequerimiento;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use PDF;
 
 class HomeController extends Controller
@@ -32,7 +34,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user=auth()->user()->getRoleNames();
+        return $user;
     }
     public function index1()
     {
@@ -40,14 +43,14 @@ class HomeController extends Controller
     }
     public function mostrarPDF(Request $request){
         if($request->id==0){
-            $fecha=entidad::select(/*'nombre',*/DB::raw('curdate() as fech'))/*->where('id',$request->id)*/->first();
-            $encargados=entidad::join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
-                ->select('encargado.*','nombre','tipo')->get();
-            $url='pdfs/General-'.$fecha->fech.'.pdf';
-            $pdf = PDF::loadView ( 'PDFs.reporteGeneral' , compact('encargados','nSubEnt','nArea'));
-            $pdf->save($url);
-            $url='/'.$url;
-            $dato = compact('url');
+            // $fecha=entidad::select(/*'nombre',*/DB::raw('curdate() as fech'))/*->where('id',$request->id)*/->first();
+            // $encargados=entidad::join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
+            //     ->select('encargado.*','nombre','tipo')->get();
+            // $url='pdfs/General-'.$fecha->fech.'.pdf';
+            // $pdf = PDF::loadView ( 'PDFs.reporteGeneral' , compact('encargados','nSubEnt','nArea'));
+            // $pdf->save($url);
+            // $url='/'.$url;
+            // $dato = compact('url');
         }else{
             $fecha=entidad::select('nombre',DB::raw('curdate() as fech'))
                             ->where('id',$request->id)->first();
@@ -59,20 +62,25 @@ class HomeController extends Controller
             $labs=subentidad::join('tipo','subentidad.tipo_id','tipo.id')
                             ->select('nom_tip')
                             ->where('entidad_id',$encargados->entidad_id)->groupBy('nom_tip')->get();
-            $detalles=DetalleSoftware::join('subentidad','detalle_software.subentidad_id','subentidad.id')
+            $detalles=DetalleRequerimiento::join('subentidad','requerimiento.subentidad_id','subentidad.id')
                                         ->join('entidad','subentidad.entidad_id','entidad.id')
-                                        ->join('sft_especializado','detalle_software.sft_especializado_id','sft_especializado.id')
-                                        ->select('detalle_software.*','entidad.nombre as enti','subentidad.nombre as subenti',
+                                        ->join('det_periodicidad','requerimiento.det_periodicidad_id','det_periodicidad.id')
+                                        ->join('det_tipo_licencia','requerimiento.det_tipo_licencia_id','det_tipo_licencia.id')
+                                        ->join('sft_especializado','det_tipo_licencia.sft_especializado_id','sft_especializado.id')
+                                        ->select('requerimiento.*','entidad.nombre as enti','subentidad.nombre as subenti',
                                                 'sft_especializado.nombre','sft_especializado.nombre as sft_nom', 
                                                 'sft_especializado.año as anio', 'version', 'tipo_licencia_id')
                                         ->where('entidad.id',$encargados->entidad_id)->get();
-            $sftGenerales=DB::table('sft_predeterminado')->get();
+            $sftGenerales=DB::table('sft_predeterminado')
+                                    ->join('tipo_licencia','sft_predeterminado.tipo_licencia_id','tipo_licencia.id')
+                                    ->join('periodo','sft_predeterminado.periodo_id','periodo.id')
+                                    ->select('sft_predeterminado.*','tipo','periodo')->get();
             $url='pdfs/'.$fecha->nombre.' - '.$fecha->fech.'.pdf';
             $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('encargados','subEnts','tipos','labs','detalles','sftGenerales'));
             $pdf->save($url);
             $entidad=$encargados->nombre;
             $url='/'.$url;
-            $dato = compact('entidad','url');
+            $dato = compact('entidad','url'); 
         }
         return $dato;
     }

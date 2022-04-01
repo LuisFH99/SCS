@@ -70,8 +70,8 @@
 	<div class="col-md-3 col-sm-6 my-3">
         <div class="form-group">
             {{ Form::label('Entidad:', null, ['class' => 'control-label']) }}
-            <div class="input-group">
-                <select name="entidad" id="entidad" class="form-control js-example-basic-single" placeholder="Seleccionar..." required>
+            <div class="form-group">
+                <select name="entidad" id="entidad" class="form-control js-example-basic-single form-control" placeholder="Seleccionar..." required>
 					@foreach ($tipo as $item)
 						<optgroup label="{{$item->tipo}}">
 							@foreach ($entidades1 as $entidad1)

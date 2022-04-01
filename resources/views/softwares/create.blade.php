@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Registrar de Usuarios')
+@section('title', 'Registrar Software')
 
 @section('content_header')
-    <h1>Registrar Usuarios</h1>
+    <h1>Registrar Software</h1>
 @stop
 
 @section('content')
@@ -12,9 +12,9 @@
       <div class="container-fluid">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item">
-                <a href="{{ route('users.index') }}">
+                <a href="{{ route('softwares.index') }}">
                     <i class="fas fa-fw fa-arrow-left"></i>
-                    Lista de Usuarios
+                    Lista de Software
                 </a>
             </li>
             <li class="breadcrumb-item active">Registrar</li>
@@ -25,12 +25,12 @@
         <div class="container-fluid">
             <div class="card mt-4">
                 <div class="card-header">
-                    Registrar Usuario
+                    Registrar Software
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['route' => 'users.store','class'=>'needs-validation','novalidate']) !!}
+                    {!! Form::open(['route' => 'softwares.store','class'=>'needs-validation','novalidate']) !!}
                         @csrf
-                        @include('users.partials.form')
+                        @include('softwares.partials.form-create')
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -40,8 +40,6 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="/css/style.css">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
     <!-- Google Fonts -->
@@ -50,6 +48,8 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet"/> --}}
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin_custom.css">
+    <link rel="stylesheet" href="/css/style.css">
     @toastr_css
 @stop
 
@@ -63,7 +63,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-single').select2();
+            $('.js-example-basic-multiple').select2({
+                placeholder: "Seleccionar..."
+            });
+            $('.js-example-basic-multiple1').select2({
+                placeholder: "Seleccionar..."
+            });
         });
         function SoloNumeros(e){
             var key= Window.Event? e.which : e.keyCode;
@@ -71,6 +76,17 @@
                 e.preventDefault();
             }
         };
+        function mostrarPrecio(id) {
+            if(id==1){
+                //aparecer
+                $("#divPrecio").removeClass("d-none");
+                $("#divPrecio").addClass("d-flex");
+            }else{
+                //desaparecer
+                $("#divPrecio").removeClass("d-flex");
+                $("#divPrecio").addClass("d-none");
+            }
+        }
     </script>
 @stop
 

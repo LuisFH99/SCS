@@ -264,12 +264,17 @@ return [
 
         ],
         [
+            'text'        => 'Gestion de Softwares',
+            'route'         => 'softwares.index',
+            'icon'        => 'nav-icon fas fa-boxes',
+     
+        ],
+        [
             'text'        => 'Reportes',
             'url'         => '/reportes',
             'icon'        => 'far fa-fw fa-file',
      
         ],
-
         [
             'text'        => 'Lista Entidades',
             'route'         => 'admin.entidades.index',
@@ -335,16 +340,16 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
             ],
