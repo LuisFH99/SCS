@@ -1,6 +1,21 @@
 <div class="row">
 
     @foreach ($entidades as $entidad)
+        @can('admin.users.index')
+            <div class="content-header ml-auto mt-auto">
+                <div class="container-fluid">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.entidades.index') }}">
+                                <i class="fas fa-fw fa-arrow-left"></i>
+                                Lista Entidades
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">Entidad</li>
+                    </ol>
+                </div>
+            </div>
+        @endcan
         <div class="col-12 my-2">
             <h2 class="text-center text-uppercase">{{ $entidad->nombre }}</h2>
         </div>

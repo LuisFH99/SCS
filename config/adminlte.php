@@ -243,8 +243,8 @@ return [
             'text' => 'Entidad',
             
             'icon'  => 'nav-icon fa fa-sitemap',
-            'route'  => 'home',
-
+            'route' => 'home',
+            'can'   => 'encargado.software.index',
         ],
 
         [
@@ -256,35 +256,27 @@ return [
             'text'        => 'Gestion de Usuarios',
             'url'         => '/users',
             'icon'        => 'fas fa-fw fa-users',
-            /*'label'       => 4,
-            'label_color' => 'success',*/
+            'can'         => 'admin.users.index',
 
         ],
         [
             'text'        => 'Gestion de Softwares',
-            'route'         => 'softwares.index',
+            'route'       => 'softwares.index',
             'icon'        => 'nav-icon fas fa-boxes',
-     
+            'can'         => 'admin.users.index',
         ],
         [
             'text'        => 'Reportes',
             'url'         => '/reportes',
             'icon'        => 'far fa-fw fa-file',
-     
+            'can'         => 'admin.users.index',
         ],
         [
             'text'        => 'Lista Entidades',
             'route'         => 'admin.entidades.index',
             'icon'        => 'nav-icon fas fa-th',
-     
+            'can'         => 'admin.users.index',
         ],
-        [
-            'text'        => 'Reporte',
-            'route'         => 'ReportListSoftwares',
-            'icon'        => 'nav-icon fas fa-th',
-     
-        ],
-        
     ],
 
     /*

@@ -13,7 +13,7 @@
             <div class="card mt-4">
                 <div class="card-header">
                     Reporte General
-                    <a href="#" class="btn btn-primary float-right" onclick="imprimir(0,0)">
+                    <a href="{{route('ReportListSoftwares')}}" class="btn btn-primary float-right" onclick="imprimir(0,0)" target="_blank">
                         <i class="fa fa-file"></i>
                         Reporte General
                     </a>

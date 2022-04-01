@@ -154,8 +154,8 @@
                                             <td class="the">{{$detalle->nombre}}</td>
                                             <td class="titulo the">{{$detalle->cantidad}}</td>
                                             <td class="the"><a class="dis-in" 
-                                                href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}">
-                                                {{(!is_null($detalle->cotizacion)?'Ver Cotización':'')}}</a></td>
+                                                href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}" target="_blank">
+                                                {{(!is_null($detalle->cotizacion)?'Ver Cotización':'')}} </a></td>
                                             <td class="right the">{{$detalle->precio_referencial}}</td>@php
                                                 $subtotal=$detalle->cantidad*$detalle->precio_referencial;
                                             @endphp
@@ -179,7 +179,7 @@
                 @endforeach
             </div>
             <div>
-                <p><b>Total</b> de gasto de la <b>{{$encargados->nombre}}</b> es de <b>S/. {{number_format($totalEnt,2)}}</b></p>
+                <p><b>Monto Total</b> para la adquisición de Softwares de la<b>{{$encargados->nombre}}</b> asciende a <b>S/. {{number_format($totalEnt,2)}}</b></p>
             </div>
             <br><br>
             <div class="Row titulo">
