@@ -379,3 +379,11 @@
 .info-bg {
     background: #88cef7;
 }
+
+.sidebar-dark-primary {
+    background-color: #002548 !important;
+}
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #336593 !important; 
+}

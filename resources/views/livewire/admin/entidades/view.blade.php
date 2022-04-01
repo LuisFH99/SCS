@@ -43,9 +43,15 @@
                                     <i class="fas fa-user-plus"></i>
                                 </button> --}}
             
-                                <a data-toggle="collapse" href="#collapse{{ $entidad->id }}" class="btn btn-success btn-sm">
+                                <a data-toggle="collapse" href="#collapse{{ $entidad->id }}" class="btn btn-success btn-sm mr-1">
                                     <i class="fas fa-eye"></i>
                                 </a>
+                                <a class="btn btn-info btn-sm" wire:click="enivarid({{$entidad->id}})">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </a>
+                                {{-- <button type="button" class="btn btn-info btn-sm">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </button> --}}
             
                                 {{-- <button type="button" class="btn btn-danger btn-sm" >
                                     <i class="fas fa-trash"></i>

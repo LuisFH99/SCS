@@ -8,7 +8,7 @@ use App\Models\Subentidad;
 
 use Livewire\WithPagination;
 
-class Entidades extends Component
+class EntidadesAdmin extends Component
 {
     use WithPagination;
     public $buscar;
@@ -39,6 +39,12 @@ class Entidades extends Component
             
         }
         $this->emit('alertaSistema', $datos);
-        //dd($subentidad);
+    }
+
+    public function enivarid($identidad){
+        //Entidades::setidentidad($identidad);
+        session(['identidad'=>$identidad]);
+        
+        return redirect()->to('/home');
     }
 }
