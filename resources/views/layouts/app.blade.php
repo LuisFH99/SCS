@@ -19,8 +19,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .fondo{
+            background: url('/images/fondo.jpg') no-repeat center center fixed; height: auto;-webkit-background-size: cover;
+        }
+    </style>
 </head>
-<body>
+<body class="fondo">
     <div id="app">
         <main class="py-4">
             @yield('content')

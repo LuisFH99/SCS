@@ -227,10 +227,13 @@ class Requerimiento extends Component
 
     public function quitarsoftware($idrequerimiento)
     {
+        $ruta=str_replace('storage','public',DetalleRequerimiento::where('id',$idrequerimiento)->value('cotizacion'));
+        Storage::delete($ruta);
         DetalleRequerimiento::destroy($idrequerimiento);
+ 
         $datos = [
             'modo' => 'bg-success',
-            'mensaje' => 'Se elimino el Software del Requerimiento.'
+            'mensaje' => 'El software se quito de los requerimientos.',
         ];
         $this->emit('alertaArea', $datos);
     }

@@ -39,14 +39,14 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you can change the logo of your admin panel.
-    |
+    |vendor/adminlte/dist/img/AdminLTELogo.png
     | For detailed instructions you can look the logo section here:
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
 
     'logo' => '<b>Gestion</b>Software',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo_img' => 'images/login.webp',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -129,7 +129,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-info navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -229,7 +229,7 @@ return [
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -237,10 +237,7 @@ return [
         ],
 
         // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
+        
 
         [
             'text' => 'Entidad',
@@ -278,6 +275,12 @@ return [
         [
             'text'        => 'Lista Entidades',
             'route'         => 'admin.entidades.index',
+            'icon'        => 'nav-icon fas fa-th',
+     
+        ],
+        [
+            'text'        => 'Reporte',
+            'route'         => 'ReportListSoftwares',
             'icon'        => 'nav-icon fas fa-th',
      
         ],

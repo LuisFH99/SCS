@@ -474,4 +474,16 @@
     window.onload = function() {
         miNotificacion();
     }
+    function miNotificacion() {
+        Livewire.on('alertaArea', function(datos) {
+            $(document).Toasts('create', {
+                class: datos.modo,
+                title: 'Mensaje de Sistema',
+                body: datos.mensaje,
+                autohide: true,
+                delay: 950
+            })
+            document.getElementById("uploadedfile").value = "";
+        });
+    }
 </script>

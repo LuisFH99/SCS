@@ -8,7 +8,7 @@
     <h3 class="font-weight-bold mt-2 ">CONTROL DE ENTIDADES</h3>
 </div>
     
-    <livewire:admin.entidades />
+    <livewire:admin.entidades-admin />
 @stop
 
 @section('css')
@@ -30,7 +30,7 @@
                 }).then((e)=>{
                     console.log(e)
                 if ( e == ("confirm")){
-                    Livewire.emitTo('admin.entidades','cambiarestado',subentidadId)
+                    Livewire.emitTo('admin.entidades-admin','cambiarestado',subentidadId)
                 } else {
                     console.log('No confirmo');
                 }

@@ -26,6 +26,7 @@
 
 @section('css')
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    
 @stop
 
 @section('js')
