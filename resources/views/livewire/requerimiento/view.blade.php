@@ -226,7 +226,8 @@
                                                         <label class="form-label">Cotización: <strong
                                                                 style="color: red">*</strong></label>
                                                         <input type="file" class="form-control-file" id="uploadedfile"
-                                                            wire:model="cotizacion" accept="application/pdf, image/png, image/jpeg">
+                                                            wire:model="cotizacion"
+                                                            accept="application/pdf, image/png, image/jpeg">
                                                         @error('cotizacion')
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
@@ -236,9 +237,14 @@
                                                         <textarea class="form-control" name="descripcion" rows="2"></textarea>
 
                                                     </div>
+                                                    <div class="alert alert-warning col-6 mt-2">
+                                                        
+                                                        <h6><i class="icon fas fa-exclamation-triangle"></i> <b>Advertencia!</b> Tener en cuenta lo siguiente</h6>
+                                                        Los datos de la licencia requerida deben ser acorde, a la cotización que se envía.
+                                                    </div>
 
                                                     <div
-                                                        class="col-6 text-center d-flex justify-content-center align-items-end">
+                                                        class="col-12 text-center d-flex justify-content-center align-items-end">
                                                         <button class="btn btn-primary mr-1" wire:click="registrar"> <i
                                                                 class="fas fa-tasks"></i> Registrar</button>
                                                         <button class="btn btn-danger " wire:click="limpiar"> <i
@@ -474,6 +480,7 @@
     window.onload = function() {
         miNotificacion();
     }
+
     function miNotificacion() {
         Livewire.on('alertaArea', function(datos) {
             $(document).Toasts('create', {

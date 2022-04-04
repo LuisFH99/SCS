@@ -408,6 +408,13 @@
     
     .sidebar-dark-primary {
         background-color: #002548 !important;
+        
+    }
+    .navbar-info{
+        background-color: #0752B5 !important;
+    }
+    .nav-sidebar{
+        color: white !important;
     }
     
     .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
