@@ -16,10 +16,24 @@
                 </div>
             </div>
         @endcan
+
         <div class="col-12 my-2">
             <h2 class="text-center text-uppercase">{{ $entidad->nombre }}</h2>
         </div>
-
+        <hr>
+        <div class="col-12">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"><a href="#" class="btn btn-info btn-sm" onclick="imprimir({{$entidad->id}},1)">
+                            <i class="fas fa-fw fa-file mr-1"></i>
+                            Reporte
+                        </a></li>
+                    </ol>
+                </div>
+            </div>
+        </div><br><br><br>
+        
         @foreach ($entidad->subentidades as $subentidad)
             <div class="col-md-4 mb-2">
                 <div class="card h-100 border-success rounded shadow">
