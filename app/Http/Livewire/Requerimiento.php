@@ -8,10 +8,7 @@ use App\Models\SoftwarePredeterminado;
 use App\Models\SoftwareEspecializado;
 use App\Models\DetalleSoftware;
 use App\Models\TipoLicencia;
-use App\Models\TipoArea;
 use App\Models\Subentidad;
-use App\Models\DetalleTipoLicencia;
-use App\Models\DetallePeriodicidad;
 use App\Models\DetalleRequerimiento;
 
 use Livewire\WithPagination;
@@ -84,7 +81,8 @@ class Requerimiento extends Component
         $subentidad=Subentidad::where('id',$this->id_subentidad)->first();
            
         $sftpredeterminado=SoftwarePredeterminado::all();
-        $sftespecializado=SoftwareEspecializado::where('nombre','like','%'.$this->buscar.'%')->orderBy('id', 'desc')->paginate(10);
+        $sftespecializado=SoftwareEspecializado::where('nombre','like','%'.$this->buscar.'%')
+                                                ->orderBy('id', 'desc')->paginate(10);
         $requerimientos=DetalleRequerimiento::where('subentidad_id',$this->id_subentidad)->get();
         $tipolicencias=TipoLicencia::all();
         return view('livewire.requerimiento.view',compact('subentidad','sftpredeterminado','sftespecializado','requerimientos','tipolicencias'));
