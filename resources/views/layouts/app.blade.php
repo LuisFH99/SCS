@@ -23,6 +23,9 @@
         .fondo{
             background: url('/images/fondo.jpg') no-repeat center center fixed; height: auto;-webkit-background-size: cover;
         }
+        .btn-fondo{
+            background-color:#0752B5;
+        }
     </style>
 </head>
 <body class="fondo">

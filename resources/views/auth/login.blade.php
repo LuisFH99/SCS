@@ -73,14 +73,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card mt-5" style="border-radius: 5px;">
-                <div class="card-header text-center">
+            <div class="card mt-5" style="border-radius: 5px; background:#c4c3c1;">
+                {{-- <div class="card-header text-center">
                     <h5><strong>SISTEMA DE REQUERIMIENTO LICENCIAS DE SOFTWARE - UNASAM</strong></h5>  
-                </div>
+                </div> --}}
 
                 <div class="card-body">
                     <div class = "mb-4" style="text-align: center;">
-                        <img src="{{ asset('/images/unasam.png') }}" style="max-width: 100px">
+                        <img src="{{ asset('/images/ogtiselogo.png') }}" style="max-width: 300px">
                         
                     </div>
                     <form method="POST" action="{{ route('login') }}">
@@ -90,7 +90,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Usuario') }}</label>
 
                             <div class="col-md-7">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"  name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -130,7 +130,9 @@
                             <div class="text-center">
                                 <button style="
                                 padding: 12px;
-                                font-size: 17px;" type="submit" class="btn btn-primary col-12">
+                                font-size: 17px;
+                                color: #fff;
+                                font-weight: bold;" type="submit" class="btn btn-fondo col-12">
                                    <i class="fas fa-sign-in-alt"></i> {{ __('INGRESAR') }}
                                 </button>
 
