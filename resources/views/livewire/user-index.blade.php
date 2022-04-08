@@ -18,21 +18,21 @@
                             <th>DNI</th>
                             <th>Nombre</th>
                             <th>Email</th>
+                            <th>Teléfono</th>
                             <th>Tipo</th>
                             <th>Entidad</th>
                             <th width="320px"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $aux=1;
-                        @endphp
+                        
                         @foreach($users as $user)
                         <tr>
-                            <td>{{ $aux++; }}</td>
+                            <td>{{ $user->contador }}</td>
                             <td>{{ $user->DNI }}</td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
+                            <td>{{ $user->telefono }}</td>
                             <td>{{ $user->tipo }}</td>
                             <td>{{ $user->nombre }}</td>
                             <td>

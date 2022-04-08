@@ -14,7 +14,7 @@ use App\Models\TipoLicencia;
 use App\Models\Periodo;
 use App\Models\DetalleTipoLicencia;
 use App\Models\DetallePeriodicidad;
-
+use App\Models\DetalleSoftware;
 class SoftwareController extends Controller
 {
     public function __construct() {
@@ -41,6 +41,7 @@ class SoftwareController extends Controller
         $periodos=Periodo::pluck('periodo','id');
         return view('softwares.create', compact('tipos','periodos'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -48,8 +49,7 @@ class SoftwareController extends Controller
             'anio' => 'required',
             'version'=> 'required',
             'precio'=> 'numeric|between:0.00,999999.99',
-            'tipoLicencia'=> 'required',
-            'tipoPeriodo'=> 'required',
+            
         ]);
         if($request->tipoSofware==2){//Especializado
             $softwareE=SoftwareEspecializado::create([
@@ -58,35 +58,50 @@ class SoftwareController extends Controller
                 'version' =>$request->version
             ]);
             $ultimoId=SoftwareEspecializado::orderBy('id','DESC')->first();
-            foreach ($request->tipoLicencia as $tipo) {
-                $softwareE=DetalleTipoLicencia::create([
-                    'sft_especializado_id'  =>$ultimoId->id, 
-                    'tipo_licencia_id'      =>$tipo
-                ]);
+            if(!is_null($request->tipoLicencia)&&!is_null($request->tipoPeriodo)){
+                if(is_null($request->tiposid)&&is_null($request->periodosid)){
+                    foreach ($request->tipoLicencia as $tipo) {
+                        foreach ($request->tipoPeriodo as $periodo) {
+                            $softwareE=DetalleSoftware::create([
+                                'sft_especializado_id'  =>$ultimoId->id, 
+                                'tipo_licencia_id'      =>$tipo, 
+                                'periodo_id'      =>$periodo
+                            ]);
+                        }
+                    }
+                }
             }
-            foreach ($request->tipoPeriodo as $periodo) {
-                $softwareE=DetallePeriodicidad::create([
-                    'sft_especializado_id'  =>$ultimoId->id, 
-                    'periodo_id'      =>$periodo
-                ]);
+            if(!is_null($request->tiposid)&&!is_null($request->periodosid)){
+                //if(is_null($request->tipoLicencia)&&is_null($request->tipoPeriodo)){
+                    for ($i=0; $i <count($request->tiposid) ; $i++) { 
+                        $softwareE=DetalleSoftware::create([
+                            'sft_especializado_id'  =>$ultimoId->id, 
+                            'tipo_licencia_id'      =>$request->tiposid[$i], 
+                            'periodo_id'      =>$request->periodosid[$i]
+                        ]);
+                    }
+                //}
             }
+            
             if ($softwareE instanceof Model) {
                 toastr()->success('Software registrado correctamente!');
                 return redirect()->route('softwares.index');
             }
         }
         if($request->tipoSofware==1){//Predeterminado 
-            $softwareP=SoftwarePredeterminado::create([
-                'nombre'=>$request->nombre, 
-                'año'   =>$request->anio, 
-                'version' =>$request->version,
-                'precio_referencial'=>$request->precio,
-                'tipo_licencia_id'  =>$request->tipoLicencia[0],
-                'periodo_id' =>$request->tipoPeriodo[0]
-            ]);
-            if ($softwareP instanceof Model ) {
-                toastr()->success('Software registrado correctamente!');
-                return redirect()->route('softwares.index');
+            if(!is_null($request->tipoLicencia)&&!is_null($request->tipoPeriodo)){
+                $softwareP=SoftwarePredeterminado::create([
+                    'nombre'=>$request->nombre, 
+                    'año'   =>$request->anio, 
+                    'version' =>$request->version,
+                    'precio_referencial'=>$request->precio,
+                    'tipo_licencia_id'  =>$request->tipoLicencia[0],
+                    'periodo_id' =>$request->tipoPeriodo[0]
+                ]);
+                if ($softwareP instanceof Model ) {
+                    toastr()->success('Software registrado correctamente!');
+                    return redirect()->route('softwares.index');
+                }
             }
         }
         toastr()->error('Ha ocurrido un error, por favor inténtelo nuevamente.');
@@ -124,17 +139,19 @@ class SoftwareController extends Controller
     public function edit1( $software, $tipo)
     {
         if($tipo=='Especializado'){
-            $dTipoLics=DetalleTipoLicencia::where('sft_especializado_id',$software)->get()/*pluck('tipo_licencia_id','id')*/;
-            $dPeriodos=DetallePeriodicidad::where('sft_especializado_id',$software)->get()/*pluck('periodo_id','id')*/;
+            //$dTipoLics=DetalleTipoLicencia::where('sft_especializado_id',$software)->get()/*pluck('tipo_licencia_id','id')*/;
+            //$dPeriodos=DetallePeriodicidad::where('sft_especializado_id',$software)->get()/*pluck('periodo_id','id')*/;
             $software=SoftwareEspecializado::select('id','nombre','año','version',
                                                 DB::raw('"0.00" as precio_referencial'),
-                                                DB::raw('2 as tipo'), 
-                                                DB::raw('"0" as tipo_licencia_id'), 
-                                                DB::raw('"0" as periodo_id'))
+                                                DB::raw('2 as tipo'))
                                             ->where('id',$software)->first();
-            $tipos=TipoLicencia::get()/*pluck('tipo','id')*/;
-            $periodos=Periodo::get()/*pluck('periodo','id')*/;
-            $datos=compact('software','tipos','periodos','dTipoLics','dPeriodos');
+            $detalles=DetalleSoftware::join('periodo','det_software.periodo_id','periodo.id')
+                                        ->join('tipo_licencia','det_software.tipo_licencia_id','tipo_licencia.id')
+                                        ->select('periodo.id as idp','periodo','tipo_licencia.id as idt','tipo')
+                                        ->where('sft_especializado_id',$software->id)->get();
+            $tipos=TipoLicencia::pluck('tipo','id');
+            $periodos=Periodo::pluck('periodo','id');
+            $datos=compact('software','tipos','periodos','detalles');
         }
         if($tipo=='Predeterminado'){
             $software=SoftwarePredeterminado::join('periodo','sft_predeterminado.periodo_id','periodo.id')
@@ -165,9 +182,8 @@ class SoftwareController extends Controller
             'nombre' => 'required',
             'anio' => 'required',
             'version'=> 'required',
-
-            'tipoLicencia'=> 'required',
-            'tipoPeriodo'=> 'required',
+            'precio'=> 'numeric|between:0.00,999999.99',
+            
         ]);
         if($request->tipoSofware==2){//Especializado
             $softwareE=SoftwareEspecializado::where('id', $sft)->update(array(
@@ -175,45 +191,55 @@ class SoftwareController extends Controller
                 'año'   =>$request->anio, 
                 'version' =>$request->version
             ));
-            $deTipos=DetalleTipoLicencia::where('sft_especializado_id',$sft)->get();
-            foreach ($deTipos as $tipo){
-                $deTipo=DetalleTipoLicencia::where('id',$tipo->id)->first();
-                $deTipo->delete();
+            $detalles=DetalleSoftware::where('sft_especializado_id',$sft)->get();
+            foreach ($detalles as $detalle){
+                $dets=DetalleSoftware::where('id',$detalle->id)->first();
+                $dets->delete();
             }
-            foreach ($request->tipoLicencia as $tipo) {
-                $softwareE=DetalleTipoLicencia::create([
-                    'sft_especializado_id'  =>$sft, 
-                    'tipo_licencia_id'      =>$tipo
-                ]);
+            if(!is_null($request->tipoLicencia)&&!is_null($request->tipoPeriodo)){
+                if(is_null($request->tiposid)&&is_null($request->periodosid)){
+                    foreach ($request->tipoLicencia as $tipo) {
+                        foreach ($request->tipoPeriodo as $periodo) {
+                            $softwareE=DetalleSoftware::create([
+                                'sft_especializado_id'  =>$$sft, 
+                                'tipo_licencia_id'      =>$tipo, 
+                                'periodo_id'      =>$periodo
+                            ]);
+                        }
+                    }
+                }
             }
-            $dePers=DetallePeriodicidad::where('sft_especializado_id',$sft)->get();
-            foreach ($dePers as $dePer){
-                $dPe=DetallePeriodicidad::where('id',$dePer->id)->first();
-                $dPe->delete();
+            if(!is_null($request->tiposid)&&!is_null($request->periodosid)){
+                //if(is_null($request->tipoLicencia)&&is_null($request->tipoPeriodo)){
+                    for ($i=0; $i <count($request->tiposid) ; $i++) { 
+                        $softwareE=DetalleSoftware::create([
+                            'sft_especializado_id'  =>$sft, 
+                            'tipo_licencia_id'      =>$request->tiposid[$i], 
+                            'periodo_id'      =>$request->periodosid[$i]
+                        ]);
+                    }
+                //}
             }
-            foreach ($request->tipoPeriodo as $periodo) {
-                $softwareE=DetallePeriodicidad::create([
-                    'sft_especializado_id'  =>$sft, 
-                    'periodo_id'      =>$periodo
-                ]);
-            }
+            
             if ($softwareE instanceof Model) {
                 toastr()->success('Software editado correctamente!');
                 return redirect()->route('softwares.index');
             }
         }
         if($request->tipoSofware==1){//Predeterminado 
-            $softwareP=SoftwarePredeterminado::where('id', $sft)->update(array(
-                'nombre'=>$request->nombre, 
-                'año'   =>$request->anio, 
-                'version' =>$request->version,
-                'precio_referencial'=>$request->precio,
-                'tipo_licencia_id'  =>$request->tipoLicencia[0],
-                'periodo_id' =>$request->tipoPeriodo[0]
-            ));
-            if ($softwareP == 1 ) {
-                toastr()->success('Software editado correctamente!');
-                return redirect()->route('softwares.index');
+            if(!is_null($request->tipoLicencia)&&!is_null($request->tipoPeriodo)){
+                $softwareP=SoftwarePredeterminado::where('id', $sft)->update(array(
+                    'nombre'=>$request->nombre, 
+                    'año'   =>$request->anio, 
+                    'version' =>$request->version,
+                    'precio_referencial'=>$request->precio,
+                    'tipo_licencia_id'  =>$request->tipoLicencia[0],
+                    'periodo_id' =>$request->tipoPeriodo[0]
+                ));
+                if ($softwareP == 1 ) {
+                    toastr()->success('Software editado correctamente!');
+                    return redirect()->route('softwares.index');
+                }
             }
         }
         toastr()->error('Ha ocurrido un error, por favor inténtelo nuevamente.');
@@ -230,21 +256,16 @@ class SoftwareController extends Controller
     {
         $datos = explode("-", $sft);
         if($datos[1]=='Especializado'){//Especializado
-            $deTipos=DetalleTipoLicencia::where('sft_especializado_id',$datos[0])->get();
-            foreach ($deTipos as $tipo){
-                $deTipo=DetalleTipoLicencia::where('id',$tipo->id)->first();
-                $deTipo->delete();
-            }
-            $dePers=DetallePeriodicidad::where('sft_especializado_id',$datos[0])->get();
-            foreach ($dePers as $dePer){
-                $dPe=DetallePeriodicidad::where('id',$dePer->id)->first();
-                $dPe->delete();
+            $detalles=DetalleSoftware::where('sft_especializado_id',$datos[0])->get();
+            foreach ($detalles as $detalle){
+                $dets=DetalleSoftware::where('id',$detalle->id)->first();
+                $dets->delete();
             }
             $softwareE=SoftwareEspecializado::where('id', $datos[0])->first();
             $softwareE->delete();
             if ($softwareE instanceof Model) {
                 toastr()->info('Software eliminado correctamente!');
-                return redirect()->route('users.index');
+                return redirect()->route('softwares.index');
             }
         }
         if($datos[1]=='Predeterminado'){//Predeterminado 
@@ -252,7 +273,7 @@ class SoftwareController extends Controller
             $softwareP->delete();
             if ($softwareP instanceof Model) {
                 toastr()->info('Software eliminado correctamente!');
-                return redirect()->route('users.index');
+                return redirect()->route('softwares.index');
             }
         }
         

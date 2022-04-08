@@ -414,3 +414,19 @@
     .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
         background-color: #336593 !important;
     }
+    
+    .abs-center {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        min-height: 10rem;
+    }
+    
+    .align-V {
+        vertical-align: middle !important;
+    }
+    
+    .sinborde {
+        border: 0;
+    }

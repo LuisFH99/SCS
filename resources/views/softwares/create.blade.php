@@ -61,32 +61,15 @@
     {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script> --}}
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('js/cute-alert.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2({
-                placeholder: "Seleccionar..."
-            });
             $('.js-example-basic-multiple1').select2({
-                placeholder: "Seleccionar..."
+                placeholder: "Seleccionar...",
+                allowClear: true
             });
         });
-        function SoloNumeros(e){
-            var key= Window.Event? e.which : e.keyCode;
-            if (key < 48 || key > 57) { 
-                e.preventDefault();
-            }
-        };
-        function mostrarPrecio(id) {
-            if(id==1){
-                //aparecer
-                $("#divPrecio").removeClass("d-none");
-                $("#divPrecio").addClass("d-flex");
-            }else{
-                //desaparecer
-                $("#divPrecio").removeClass("d-flex");
-                $("#divPrecio").addClass("d-none");
-            }
-        }
     </script>
+    <script src="{{ asset('js/softwares.js') }}"></script>
 @stop
 

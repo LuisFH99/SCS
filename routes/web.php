@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SoftwareController;
 use App\Http\Controllers\ReportesController;
@@ -15,6 +17,24 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Route::get('/permisos', function () {
+//     $role1 = Role::create(['name' => 'SuperAdmin']);
+//     $role2 = Role::create(['name' => 'Admin']);
+//     $role3 = Role::create(['name' => 'Encargado']);
+
+//     Permission::create(['name'=>'admin.home'])->syncRoles([$role1,$role2,$role3]);
+
+//     Permission::create(['name'=>'admin.users.index'])->syncRoles([$role1,$role2]);
+//     Permission::create(['name'=>'admin.users.edit'])->syncRoles([$role1,$role2]);
+//     Permission::create(['name'=>'admin.users.update'])->syncRoles([$role1,$role2]);
+
+//     Permission::create(['name'=>'encargado.software.index'])->syncRoles([$role1,$role3]);
+//     Permission::create(['name'=>'encargado.software.edit'])->syncRoles([$role1,$role3]);
+//     Permission::create(['name'=>'encargado.software.update'])->syncRoles([$role1,$role3]);
+//     auth()->user()->assignRole('Admin');
+//     return 'sirvió';
+// });
 
 Route::get('/', function () {
     return view('auth.login');
