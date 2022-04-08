@@ -89,6 +89,9 @@
                 right: 0cm;
                 height: 1.5cm;
             }
+            .align-V {
+                vertical-align: middle !important;
+            }
     </style>
 </head>
 <body>
@@ -116,7 +119,7 @@
                     <p>0{{$cont++}} - <b>{{strtoupper($subEnt->nombre)}}</b></p>
                     <p>N° PCs: <b>{{$subEnt->num_pc}}</b></p>
                     @php $cantidadPC=$cantidadPC+$subEnt->num_pc; @endphp
-                    <p><b>Observaciones: </b>___________________________________</p>
+                    
                     <h4 class="titulo" >Detalle de las peticiones de Software de {{$subEnt->nombre}}</h4>
                     <table class="tab">
                         <thead>
@@ -125,6 +128,8 @@
                                 <th class="the">Descripción</th>
                                 <th class="the">Cant. Licencias</th>
                                 <th class="the">Cotización</th>
+                                <th class="the">Licencia</th>
+                                <th class="the">Periodo</th>
                                 <th class="the">P. Unit Ref.</th>
                                 <th class="the">Sub total</th>
                             </tr>
@@ -135,14 +140,16 @@
                                 @endphp
                                 @foreach ($sftGenerales as $sftGeneral)
                                     <tr>
-                                        <td class="titulo the">{{$cont1++}}</td>
-                                        <td class="the">{{$sftGeneral->nombre}}</td>
-                                        <td class="titulo the">{{$subEnt->num_pc}}</td>
-                                        <td class="the"><a class="dis-in" href="#"></a></td>
-                                        <td class="right the">{{$sftGeneral->precio_referencial}}</td>@php
+                                        <td class="titulo the align-V">{{$cont1++}}</td>
+                                        <td class="the align-V align-V">{{$sftGeneral->nombre}}</td>
+                                        <td class="titulo the align-V">{{$subEnt->num_pc}}</td>
+                                        <td class="the align-V"><a class="dis-in" href="#"></a></td>
+                                        <td class="the align-V">{{$sftGeneral->tipo}}</td>
+                                        <td class="the align-V">{{$sftGeneral->periodo}}</td>
+                                        <td class="right the align-V">{{$sftGeneral->precio_referencial}}</td>@php
                                             $subtotal=$subEnt->num_pc*$sftGeneral->precio_referencial;
                                         @endphp
-                                        <td class="right the">{{number_format($subtotal,2)}}</td>@php
+                                        <td class="right the align-V">{{number_format($subtotal,2)}}</td>@php
                                             $total=$total+$subtotal;
                                         @endphp
                                     </tr>
@@ -150,16 +157,18 @@
                                 @foreach ($detalles as $detalle)
                                     @if ($subEnt->nombre==$detalle->subenti)
                                         <tr>
-                                            <td class="titulo the">{{$cont1++}}</td>
-                                            <td class="the">{{$detalle->nombre}}</td>
-                                            <td class="titulo the">{{$detalle->cantidad}}</td>
-                                            <td class="the"><a class="dis-in" 
+                                            <td class="titulo the align-V">{{$cont1++}}</td>
+                                            <td class="the align-V">{{$detalle->nombre}}</td>
+                                            <td class="titulo the align-V">{{$detalle->cantidad}}</td>
+                                            <td class="the align-V"><a class="dis-in" 
                                                 href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}" target="_blank">
                                                 {{(!is_null($detalle->cotizacion)?'Ver Cotización':'')}} </a></td>
-                                            <td class="right the">{{$detalle->precio_referencial}}</td>@php
+                                            <td class="the align-V">{{$detalle->tipo}}</td>
+                                            <td class="the align-V">{{$detalle->periodo}}</td>
+                                            <td class="right the align-V">{{$detalle->precio_referencial}}</td>@php
                                                 $subtotal=$detalle->cantidad*$detalle->precio_referencial;
                                             @endphp
-                                            <td class="right the">{{number_format($subtotal,2)}}</td>@php
+                                            <td class="right the align-V">{{number_format($subtotal,2)}}</td>@php
                                                 $total=$total+$subtotal;
                                             @endphp
                                         </tr>   
@@ -168,8 +177,8 @@
                         </tbody>
                         <tfoot>
                             <tr> 
-                                <th class="right the" colspan="5">Total  </th>
-                                <td class="right the">{{number_format($total,2)}}</td>
+                                <th class="right the align-V" colspan="7">Total  </th>
+                                <td class="right the align-V">{{number_format($total,2)}}</td>
                                 @php
                                     $totalEnt=$totalEnt+$total;
                                 @endphp
@@ -179,7 +188,7 @@
                 @endforeach
             </div>
             <div>
-                <p><b>Monto Total</b> para la adquisición de Softwares de la<b>{{$encargados->nombre}}</b> asciende a <b>S/. {{number_format($totalEnt,2)}}</b></p>
+                <p><b>Monto Total</b> para la adquisición de Softwares de la <b>{{$encargados->nombre}}</b> asciende a <b>S/. {{number_format($totalEnt,2)}}</b></p>
             </div>
             <br><br>
             <div class="Row titulo">

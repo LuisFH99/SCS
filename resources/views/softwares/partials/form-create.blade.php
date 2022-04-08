@@ -56,24 +56,52 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6 col-sm-6 my-3">
+	<div class="col-md-5 col-sm-6 my-3">
 		<div class="form-group">
 			{{ Form::label('Licencia:', null, ['class' => 'control-label']) }}
 			{!! Form::select("tipoLicencia[]", $tipos, null, ['class' => 'js-example-basic-multiple form-control',
-															  'multiple'=>'multiple']) !!}
+															  'placeholder'=>'Seleccionar...']) !!}
 			@error('tipoLicencia')
 				<small class="text-danger">{{$message}}</small>
 			@enderror
 		</div>
 	</div>
-	<div class="col-md-6 col-sm-6 my-3">
+	<div class="col-md-5 col-sm-6 my-3">
 		<div class="form-group">
 			{{ Form::label('Periodo:', null, ['class' => 'control-label']) }}
-			{!! Form::select("tipoPeriodo[]", $periodos, null, ['class' => 'js-example-basic-multiple form-control',
+			{!! Form::select("tipoPeriodo[]", $periodos, null, ['class' => 'js-example-basic-multiple1 form-control',
 															  'multiple'=>'multiple']) !!}
 			@error('tipoPeriodo')
 				<small class="text-danger">{{$message}}</small>
 			@enderror
+		</div>
+	</div>
+	<div class="col-md-2 d-flex" id="divAgregar">
+		<div class="form-group mt-4">
+			<br><a href="#" class="btn btn-success" onclick="llenarTable(0);"><i class="fas fa-plus-circle"></i></a>
+		</div>
+		
+	</div>
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-4"></div>
+			<div class="col-4 d-flex justify-content-center">
+				<div class="d-flex" id="divTipo">
+					<table class="table" id="tableDatos">
+						<thead>
+							<th>Tipo de Licencia</th>
+							<th>Periodicidad</th>
+							<th></th>
+						</thead>
+						<tbody id="tableDato">
+							<tr id="fila0">
+								<td colspan='3'><span class="text-danger text-center">Agregar tipo de Licencias y Periodos</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-4"></div>
 		</div>
 	</div>
 </div>

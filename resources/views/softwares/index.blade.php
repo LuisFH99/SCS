@@ -52,14 +52,14 @@
             $(document).on('click', '.delete-button', function() {
                 let csrf_token = $("meta[name='csrf-token']").attr("content");
                 Swal.fire({
-                title: '¿Estás seguro?',
-                text: "¡Se eliminará al usuario y todo registro relacionado, esta operación no se podrá revertir!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Si'
+                    title: '¿Estás seguro?',
+                    text: "¡Se eliminará al Software y todo registro relacionado, esta operación no se podrá revertir!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Si'
                 }).then((result) => {
                 if (result.value) {
                     let element = $(this)[0];
@@ -69,7 +69,13 @@
                         type: "POST",
                         data: {'_method': 'DELETE', '_token': csrf_token},
                         success: function(data) {
-                            //alert(data);
+                            $(document).Toasts('create', {
+                                class: 'bg-success',
+                                title: 'Mensaje de Sistema',
+                                body: 'Se eliminó el software correctamente',
+                                autohide: true,
+                                delay: 3350
+                            });
                             location.reload();
                             //alert(data.id +' - '+ data.name +' - ' + data.email +' - ' + data.password );
                         },

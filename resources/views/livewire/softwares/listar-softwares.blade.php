@@ -31,40 +31,21 @@
                         @endphp
                         @foreach($softwares as $software)
                             <tr>
-                                <td>{{ $aux++; }}</td>
-                                <td>{{ $software->nombre }}</td>
-                                <td>{{ $software->año }}</td>
-                                <td>{{ $software->version }}</td>
-                                <td>{{ $software->precio_referencial }}</td>
-                                <td>
-                                    @if ($software->tipo_licencia_id==0)
-                                        <ul>
-                                            @foreach ($tipoLicenciasDetalles as $tipoLicenciasDetalle)
-                                                @if ($tipoLicenciasDetalle->sft_especializado_id==$software->id&&$software->tipo_licencia_id==0)
-                                                    <li>{{$tipoLicenciasDetalle->tipo}}</li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        {{ $software->tipo_licencia_id }}
-                                    @endif
-                                    
-                                </td>
-                                <td>
-                                    @if ($software->periodo_id==0)
-                                        <ul>
-                                            @foreach ($periodicidadDetalles as $periodicidadDetalle)
-                                                @if ($periodicidadDetalle->sft_especializado_id==$software->id&&$software->periodo_id==0)
-                                                    <li>{{$periodicidadDetalle->periodo}}</li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        {{ $software->periodo_id }}
-                                    @endif
-                                </td>
-                                <td>{{ $software->tipo }}</td>
-                                <td>
+                                <td class="text-center align-V">{{ $software->contador}}</td>
+                                <td class="align-V">{{ $software->nombre }}</td>
+                                <td class="text-center align-V">{{ $software->año }}</td>
+                                <td class="text-center align-V">{{ $software->version }}</td>
+                                <td class="text-center align-V">{{ $software->precio_referencial }}</td>
+                                @if ($software->tipo=='Predeterminado')
+                                    <td class="text-center align-V">{{ $software->tipo_licencia_id }}</td>
+                                    <td class="text-center align-V">{{ $software->periodo_id }}</td>
+                                @else
+                                    <td colspan="2">
+                                        @livewire('softwares.listar-tipos', ['sft' => $software->id], key($software->id))
+                                    </td>
+                                @endif
+                                <td class="text-center align-V">{{ $software->tipo }}</td>
+                                <td class="text-center align-V">
                                     <a href="{{ route('softwares.edit1', ['software' => $software->id,'tipo' => $software->tipo]) }}" class="btn btn-primary">
                                         <i class="fas fa-fw fa-edit"></i>
                                         Editar
