@@ -99,6 +99,8 @@
             <tbody>
                 @php
                     $num = 1;
+                    $rowname=1;
+                    $rowlic=1;
                 @endphp
                 @foreach ($sftpredeterminado as $item)
                     <tr>
@@ -107,26 +109,26 @@
                         <td>{{ $item->nombre }}</td>
                         <td style="text-align: center;">{{ $item->licencia->tipo }}
                         </td>
-                        <td style="text-align: center;"><small
-                                class="badge badge-primary">{{ $item->periodo->periodo }}</small>
+                        <td style="text-align: center;">{{ $item->periodo->periodo }}
                         </td>
                         <td style="text-align: center;">
                             {{ $totalpc }}</td>
                     </tr>
                 @endforeach
+                @php
+                    $idsft = [0];
+                    $idlic = [0]
+                @endphp
                 @if (count($requerimientos) > 0)
+                
                     @foreach ($requerimientos as $requerimiento)
                         <tr>
                             <td style="text-align: center;">{{ $num++ }}.</td>
-                            <td>{{ $requerimiento->detallelicencia->software->nombre }}</td>
-                            <td style="text-align: center;"><small
-                                    class="badge badge-secondary">{{ $requerimiento->detallelicencia->tipolicencia->tipo }}</small>
-                            </td>
-                            <td style="text-align: center;"><small
-                                    class="badge badge-primary">{{ $requerimiento->detalleperiodo->periodo->periodo }}</small>
-                            </td>
-                            <td style="text-align: center;">
-                                {{ $requerimiento->cantidad }}</td>
+                            <td rowspan="{{$rowname}}" >{{ $requerimiento->detallesoftware->software->nombre }}</td>
+                            <td style="text-align: center;">{{ $requerimiento->detallesoftware->tipolicencia->tipo }}</td>
+                            <td style="text-align: center;">{{ $requerimiento->detallesoftware->tipoperiodo->periodo }}</td>
+                            <td style="text-align: center;">{{ $requerimiento->cantidad }}</td>
+                        </tr>
                     @endforeach
                 @endif
             </tbody>

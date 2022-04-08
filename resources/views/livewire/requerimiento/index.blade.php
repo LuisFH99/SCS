@@ -38,7 +38,7 @@
                 type: "question",
                 title: "Mensaje de Sistema",
                 img: "question.svg",
-                message: "Si valida el requerimiento no podra volver a editar ¿Esta seguro de Validar el Requerimiento?",
+                message: "Verifcar el requerimiento. Al validar ya no se podrá editar.¿Esta seguro de Validar el Requerimiento?",
                 confirmText: "SI",
                 cancelText: "NO"
                 }).then((e)=>{
