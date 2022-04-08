@@ -12,4 +12,10 @@ class TipoLicencia extends Model
         'tipo',
     ];
     protected $table = 'tipo_licencia';
+
+    // public function detallesoftware()
+    // {
+    //     return $this->hasMany(DetalleSoftware::class);
+
+    // }
 }

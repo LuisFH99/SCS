@@ -174,23 +174,38 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-4">
+                                                        @php
+                                                                $ids = [0];
+                                                        @endphp
                                                         <label class="form-label">Tipo de Licencia: <strong
                                                                 style="color: red">*</strong> </label>
                                                         <select wire:model="tipolc" id="tipolc" name="tipolc"
                                                             class="form-control">
                                                             <option selected="selected" value="">Seleccione...</option>
                                                             @if (isset($licencias))
-                                                                @foreach ($licencias as $licencia)
-                                                                    <option value="{{ $licencia->id }}">
-                                                                        {{ $licencia->tipolicencia->tipo }}</option>
-                                                                @endforeach
-                                                            @endif
 
+                                                                @foreach ($licencias as $licencia)
+                                                                
+                                                                    @if(!(in_array($licencia->tipolicencia->id, $ids, true)))
+                                                                    @php
+                                                                         $ids[]=$licencia->tipolicencia->id;
+                                                                    @endphp
+                                                                   
+                                                                    <option value="{{ $licencia->tipolicencia->id }}">
+                                                                        {{ $licencia->tipolicencia->tipo }}</option>
+                                                                    @endif
+                                                                    
+                                                                @endforeach
+                                                                
+                                                            @endif
                                                         </select>
+                                
+                                                        
                                                         @error('tipolc')
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
                                                     </div>
+                                                   
                                                     <div class="col-4">
                                                         <label class="form-label">Peridodo: <strong
                                                                 style="color: red">*</strong> </label>
@@ -199,8 +214,8 @@
                                                             <option selected="selected" value="">Seleccione...</option>
                                                             @if (isset($periodos))
                                                                 @foreach ($periodos as $periodo)
-                                                                    <option value="{{ $periodo->id }}">
-                                                                        {{ $periodo->periodo->periodo }}</option>
+                                                                    <option value="{{ $periodo->tipoperiodo->id }}">
+                                                                        {{ $periodo->tipoperiodo->periodo }}</option>
                                                                 @endforeach
                                                             @endif
                                                         </select>
@@ -226,7 +241,8 @@
                                                         <label class="form-label">Cotización: <strong
                                                                 style="color: red">*</strong></label>
                                                         <input type="file" class="form-control-file" id="uploadedfile"
-                                                            wire:model="cotizacion" accept="application/pdf, image/png, image/jpeg">
+                                                            wire:model="cotizacion"
+                                                            accept="application/pdf, image/png, image/jpeg">
                                                         @error('cotizacion')
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
@@ -236,9 +252,14 @@
                                                         <textarea class="form-control" name="descripcion" rows="2"></textarea>
 
                                                     </div>
+                                                    <div class="alert alert-warning col-6 mt-2">
+                                                        
+                                                        <h6><i class="icon fas fa-exclamation-triangle"></i> <b>Advertencia!</b> Tener en cuenta lo siguiente</h6>
+                                                        Los datos de la licencia requerida deben ser acorde, a la cotización que se envía.
+                                                    </div>
 
                                                     <div
-                                                        class="col-6 text-center d-flex justify-content-center align-items-end">
+                                                        class="col-12 text-center d-flex justify-content-center align-items-end">
                                                         <button class="btn btn-primary mr-1" wire:click="registrar"> <i
                                                                 class="fas fa-tasks"></i> Registrar</button>
                                                         <button class="btn btn-danger " wire:click="limpiar"> <i
@@ -321,13 +342,13 @@
                                                                             wire:click="$emit('confirmQuitarSoftware',{{ $requerimiento->id }})"></i>
                                                                     </td>
                                                                     <td style="width: 10px">{{ $num++ }}.</td>
-                                                                    <td>{{ $requerimiento->detallelicencia->software->nombre }}
+                                                                    <td>{{ $requerimiento->detallesoftware->software->nombre }}
                                                                     </td>
                                                                     <td style="text-align: center;"><small
-                                                                            class="badge badge-secondary">{{ $requerimiento->detallelicencia->tipolicencia->tipo }}</small>
+                                                                            class="badge badge-secondary">{{ $requerimiento->detallesoftware->tipolicencia->tipo }}</small>
                                                                     </td>
                                                                     <td style="text-align: center;"><small
-                                                                            class="badge badge-primary">{{ $requerimiento->detalleperiodo->periodo->periodo }}</small>
+                                                                            class="badge badge-primary">{{ $requerimiento->detallesoftware->tipoperiodo->periodo }}</small>
                                                                     </td>
                                                                     <td style="text-align: center;">
                                                                         {{ $requerimiento->cantidad }}</td>
@@ -432,12 +453,12 @@
                                 @foreach ($requerimientos as $requerimiento)
                                     <tr>
                                         <td style="text-align: center;">{{ $num++ }}.</td>
-                                        <td>{{ $requerimiento->detallelicencia->software->nombre }}</td>
+                                        <td>{{ $requerimiento->detallesoftware->software->nombre }}</td>
                                         <td style="text-align: center;"><small
-                                                class="badge badge-secondary">{{ $requerimiento->detallelicencia->tipolicencia->tipo }}</small>
+                                                class="badge badge-secondary">{{ $requerimiento->detallesoftware->tipolicencia->tipo }}</small>
                                         </td>
                                         <td style="text-align: center;"><small
-                                                class="badge badge-primary">{{ $requerimiento->detalleperiodo->periodo->periodo }}</small>
+                                                class="badge badge-primary">{{ $requerimiento->detallesoftware->tipoperiodo->periodo }}</small>
                                         </td>
                                         <td style="text-align: center;">
                                             {{ $requerimiento->cantidad }}</td>
@@ -474,6 +495,7 @@
     window.onload = function() {
         miNotificacion();
     }
+
     function miNotificacion() {
         Livewire.on('alertaArea', function(datos) {
             $(document).Toasts('create', {

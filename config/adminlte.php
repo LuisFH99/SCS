@@ -248,14 +248,9 @@ return [
         ],
 
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        [
             'text'        => 'Gestion de Usuarios',
             'url'         => '/users',
-            'icon'        => 'fas fa-fw fa-users',
+            'icon'        => 'nav-icon fas fa-fw fa-users',
             'can'         => 'admin.users.index',
 
         ],

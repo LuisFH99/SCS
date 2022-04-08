@@ -139,8 +139,10 @@ class Requerimiento extends Component
         $sfe = SoftwareEspecializado::find($id);
 
         $this->nombresf=$sfe->nombre;
-        $this->licencias=DetalleTipoLicencia::where('sft_especializado_id',$id)->get();
-        $this->periodos=DetallePeriodicidad::where('sft_especializado_id',$id)->get();
+        // $this->licencias=DetalleSoftware::where('sft_especializado_id',$id)->select('tipo_licencia')->distinct()->get();
+        // $this->licencias=DetalleSoftware::join('tipo_licencia','det_software.tipo_licencia_id','tipo_licencia.id')->select('tipo_licencia.id','tipo_licencia.tipo')->distinct()->get();
+        $this->licencias=DetalleSoftware::where('sft_especializado_id',$id)->get();
+        // $this->periodos=DetallePeriodicidad::where('sft_especializado_id',$id)->get();
         $this->id_software=$id;
         $this->creararea=false;
         $datos = [
@@ -149,6 +151,11 @@ class Requerimiento extends Component
         ];
         $this->emit('alertaArea', $datos);
     }
+    public function updatedtipolc($idlc)
+    {
+        $this->periodos=DetalleSoftware::where('sft_especializado_id',$this->id_software)->where('tipo_licencia_id',$idlc)->get();
+    }
+    
 
     public function GuardarPc()
     {
@@ -175,12 +182,14 @@ class Requerimiento extends Component
     {
         $this->validate($this->rulesRequerimiento,$this->msjError);
         $numpcregistrado=Subentidad::where('id',$this->id_subentidad)->value('num_pc');
-        if(DetalleRequerimiento::where('det_tipo_licencia_id',$this->tipolc)->where('subentidad_id',$this->id_subentidad)->doesntExist()){
+        $iddetsft=DetalleSoftware::where('sft_especializado_id',$this->id_software)->where('tipo_licencia_id',$this->tipolc)->where('periodo_id',$this->periodo )->value('id');
+        
+        if(DetalleRequerimiento::join('det_software','requerimiento.det_software_id','det_software.id')->where('requerimiento.subentidad_id',$this->id_subentidad)->where('sft_especializado_id',$this->id_software)->where('det_software.tipo_licencia_id',$this->tipolc)->doesntExist()){
             if(($this->cantidad) <= ($numpcregistrado)){
 
-                // $name = date('d-m-Y_H-i-s') . '_' . $this->cotizacion->getClientOriginalName();
-                // $this->cotizacion->move('cotizaciones', $name);
-                // $url="public/cotizaciones/".$name;
+                 // $name = date('d-m-Y_H-i-s') . '_' . $this->cotizacion->getClientOriginalName();
+                 // $this->cotizacion->move('cotizaciones', $name);
+                 // $url="public/cotizaciones/".$name;
             
                 $archivo = $this->cotizacion->store('public/cotizaciones');
                 $url = Storage::url($archivo);
@@ -191,8 +200,7 @@ class Requerimiento extends Component
                     'observacion' => $this->observacion,
                     'cantidad' => $this->cantidad,
                     'subentidad_id' => $this->id_subentidad,
-                    'det_tipo_licencia_id' => $this->tipolc,
-                    'det_periodicidad_id' => $this->periodo,
+                    'det_software_id' => $iddetsft,
                 ]);
                 if (isset($creado)) {
                     $datos = [

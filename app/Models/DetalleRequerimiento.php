@@ -17,19 +17,14 @@ class DetalleRequerimiento extends Model
         'observacion',
         'cantidad',
         'subentidad_id',
-        'det_tipo_licencia_id',
-        'det_periodicidad_id',
+        'det_software_id',
     ];
     public $timestamps = false;
 
-    public function detallelicencia()
+    public function detallesoftware()
     {
-        return $this->belongsTo(DetalleTipoLicencia::class,'det_tipo_licencia_id','id');
+        return $this->belongsTo(DetalleSoftware::class,'det_software_id','id');
 
     }
-    public function detalleperiodo()
-    {
-        return $this->belongsTo(DetallePeriodicidad::class,'det_periodicidad_id','id');
-
-    }
+   
 }
