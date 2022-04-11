@@ -81,7 +81,7 @@
                                     @foreach ($entidad->subentidades as $subentidad)
                                         <tr>
                                             <th style="text-align: center;" scope="row">{{ $cont++ }}.</th>
-                                            <td style="vertical-align: middle">{{ $subentidad->nombre }}</td>
+                                            <td style="vertical-align: middle" class="text-uppercase">{{ $subentidad->nombre }}</td>
                                             <td style="text-align: center;">
                                                 <span class="badge {{ $subentidad->estado == '0' ? 'bg-danger' : 'bg-success' }}">{{ $subentidad->estado == '0' ? 'Pendiente' : 'Registrado' }}</span></td>
                                             <td style=" text-align: center;"><button type="button" class="btn btn-info btn-sm" wire:click="$emit('confirmCambioEstado',{{ $subentidad}})"><i class="fas fa-retweet"></i>
