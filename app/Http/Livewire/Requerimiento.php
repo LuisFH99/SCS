@@ -29,6 +29,7 @@ class Requerimiento extends Component
     public $verarea=true;
     public $versoftware=false;
     public $verreq=false;
+    public $modoedit=false;
     public $id_subentidad;
     protected $listeners = ['validarequerimiento','quitarsoftware'];
 
@@ -47,7 +48,7 @@ class Requerimiento extends Component
         'cantidad'=>'required|numeric',
         'tipolc'=>'required',
         'periodo'=>'required',
-        'cotizacion'=>'required',
+        'cotizacion'=>'required|mimes:jpg,jpeg,png,pdf|max:4096',
         'id_software'=>'required',
         
     ];
@@ -68,6 +69,8 @@ class Requerimiento extends Component
         'tipolc.required'=>'El campo Tipo de Licencia es obligatorio',
         'periodo.required'=>'El campo Periodo es obligatorio',
         'cotizacion.required'=>'La cotizacion es obligatoria',
+        'cotizacion.mimes'=>'Solo se aceptan archivos: jpg,jpeg,png,pdf',
+        'cotizacion.max'=>'El tamaño maximo del archivo es 3MB',
         'id_software.required'=>'Debe seleccionar un Software del catalogo'
     ];
 
@@ -106,7 +109,6 @@ class Requerimiento extends Component
         $this->cantidad=null;
     }
 
-
     public function area()
     {
         $this->verarea=true;
@@ -130,6 +132,7 @@ class Requerimiento extends Component
     public function cancel()
     {
         $this->limpiar();
+        $this->modoedit = false;
     }
 
     public function seleccion($id)
@@ -137,10 +140,7 @@ class Requerimiento extends Component
         $sfe = SoftwareEspecializado::find($id);
 
         $this->nombresf=$sfe->nombre;
-        // $this->licencias=DetalleSoftware::where('sft_especializado_id',$id)->select('tipo_licencia')->distinct()->get();
-        // $this->licencias=DetalleSoftware::join('tipo_licencia','det_software.tipo_licencia_id','tipo_licencia.id')->select('tipo_licencia.id','tipo_licencia.tipo')->distinct()->get();
         $this->licencias=DetalleSoftware::where('sft_especializado_id',$id)->get();
-        // $this->periodos=DetallePeriodicidad::where('sft_especializado_id',$id)->get();
         $this->id_software=$id;
         $this->creararea=false;
         $datos = [
@@ -148,6 +148,7 @@ class Requerimiento extends Component
             'mensaje' => 'Software seleccionado.'
         ];
         $this->emit('alertaArea', $datos);
+        $this->modoedit = true;
     }
     public function updatedtipolc($idlc)
     {
@@ -158,7 +159,6 @@ class Requerimiento extends Component
     public function GuardarPc()
     {
         $this->validate($this->rulesSubentidad,$this->msjError);
-        // $=Subentidad::where('id',$this->id_subentidad)->value('num_pc');
         if(DetalleRequerimiento::where('subentidad_id',$this->id_subentidad)->doesntExist()){
             Subentidad::where('id', $this->id_subentidad)->update(['num_pc' => $this->numpc]);
             $datos = [
@@ -205,7 +205,7 @@ class Requerimiento extends Component
                         'modo' => 'bg-success',
                         'mensaje' => 'Registro creada satisfactoriamente.'
                     ];
-                    $this->limpiar();
+                    $this->cancel();
                 } else {
                     $datos = [
                         'modo' => 'bg-danger',
@@ -224,7 +224,7 @@ class Requerimiento extends Component
                 'modo' => 'bg-warning',
                 'mensaje' => 'El software ya esta registrado en el Requerimiento.'
             ];
-            $this->limpiar();
+            $this->cancel();
         }
         
         $this->emit('alertaArea', $datos);

@@ -18,44 +18,27 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::get('/permisos', function () {
-//     $role1 = Role::create(['name' => 'SuperAdmin']);
-//     $role2 = Role::create(['name' => 'Admin']);
-//     $role3 = Role::create(['name' => 'Encargado']);
-
-//     Permission::create(['name'=>'admin.home'])->syncRoles([$role1,$role2,$role3]);
-
-//     Permission::create(['name'=>'admin.users.index'])->syncRoles([$role1,$role2]);
-//     Permission::create(['name'=>'admin.users.edit'])->syncRoles([$role1,$role2]);
-//     Permission::create(['name'=>'admin.users.update'])->syncRoles([$role1,$role2]);
-
-//     Permission::create(['name'=>'encargado.software.index'])->syncRoles([$role1,$role3]);
-//     Permission::create(['name'=>'encargado.software.edit'])->syncRoles([$role1,$role3]);
-//     Permission::create(['name'=>'encargado.software.update'])->syncRoles([$role1,$role3]);
-//     auth()->user()->assignRole('Admin');
-//     return 'sirvió';
-// });
-
 Route::get('/', function () {
     return view('auth.login');
 });
+
 
 Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('users', UserController::class);
-Route::resource('softwares', SoftwareController::class);
-Route::get('/softwares/{software}/tipo/{tipo}', [App\Http\Controllers\SoftwareController::class, 'edit1'])->name('softwares.edit1');
+Route::resource('users', UserController::class)->middleware('can:admin.users.index');
+Route::resource('softwares', SoftwareController::class)->middleware('can:admin.users.index');
+Route::get('/softwares/{software}/tipo/{tipo}', [App\Http\Controllers\SoftwareController::class, 'edit1'])->middleware('can:admin.users.index')->name('softwares.edit1');
 
-Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->name('reportes');
-Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
-Route::get('/sofwares', [ReportesController::class, 'ReportListSoftwares'])->name('ReportListSoftwares');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-//Encargado
-Route::view('home', 'livewire.entidades.index')->name('home');
-Route::view('entidad/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
-//admin
-Route::view('entidades', 'livewire.admin.entidades.index')->name('admin.entidades.index');
-
+Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->middleware('can:admin.users.index')->name('reportes');
+Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->middleware('can:admin.users.index')->name('mostrarPDF');
+Route::get('/sofwares', [ReportesController::class, 'ReportListSoftwares'])->middleware('can:admin.users.index')->name('ReportListSoftwares');
+Route::middleware(['auth'])->group(function () {
+    //Encargado
+    Route::view('home', 'livewire.entidades.index')->name('home');
+    Route::view('entidad/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
+    //admin
+    Route::view('entidades', 'livewire.admin.entidades.index')->middleware('can:admin.users.index')->name('admin.entidades.index');
+});
 
