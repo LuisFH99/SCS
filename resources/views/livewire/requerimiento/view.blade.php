@@ -149,8 +149,8 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-12">
+                                    @include('livewire.requerimiento.registrar')
+                                    {{-- <div class="col-12">
                                         <div class="card card-primary card-outline">
                                             <div class="card-body">
                                                 <div class="row">
@@ -269,7 +269,7 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
@@ -494,18 +494,5 @@
 <script>
     window.onload = function() {
         miNotificacion();
-    }
-
-    function miNotificacion() {
-        Livewire.on('alertaArea', function(datos) {
-            $(document).Toasts('create', {
-                class: datos.modo,
-                title: 'Mensaje de Sistema',
-                body: datos.mensaje,
-                autohide: true,
-                delay: 950
-            })
-            document.getElementById("uploadedfile").value = "";
-        });
     }
 </script>
