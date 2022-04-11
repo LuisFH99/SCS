@@ -25,7 +25,7 @@
             <div class="content-header">
                 <div class="container-fluid">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item active"><a href="#" class="btn btn-info btn-sm" onclick="imprimir({{$entidad->id}},1)">
+                        <li class="breadcrumb-item active"><a href="{{route('mostrarPDF',$entidad->id)}}" class="btn btn-info btn-sm" onclick="imprimir({{$entidad->id}},1)">
                             <i class="fas fa-fw fa-file mr-1"></i>
                             Reporte
                         </a></li>

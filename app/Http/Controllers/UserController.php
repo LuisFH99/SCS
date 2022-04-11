@@ -52,22 +52,31 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI',
+            'DNI' => 'required|min:00000000|max:99999999',
             'apell_pat' => 'required',
             'nombres'=> 'required',
             'telefono'=> 'required|integer||min:000000000|max:999999999',
             'correo'=> 'required|email|unique:users,email|regex:/(.*)@unasam\.edu\.pe$/i',
             'entidad'=> 'required|integer',
         ]);
-        $encargado=encargado::create([
-            'DNI'       =>$request->DNI, 
-            'nombres'   =>$request->nombres, 
-            'apell_pat' =>$request->apell_pat, 
-            'apell_mat' =>$request->apell_mat, 
-            'correo'    =>$request->correo, 
-            'telefono'  =>$request->telefono,
-            'entidad_id'=>$request->entidad
-        ]);
+        $enca=encargado::where('DNI', $request->DNI)->get()->count();
+        if($enca==0){
+            $encargado=encargado::create([
+                'DNI'       =>$request->DNI,
+                'nombres'   =>$request->nombres,
+                'apell_pat' =>$request->apell_pat,
+                'apell_mat' =>$request->apell_mat,
+                'correo'    =>$request->correo,
+                'telefono'  =>$request->telefono,
+                'entidad_id'=>$request->entidad,
+                'activo'    =>1,
+                'borrado'   =>0
+            ]);
+        }else{
+            $encargado=encargado::where('DNI', $request->DNI)->update(array(
+                'activo'=>1,'borrado'=>0
+            ));
+        }
         $user=User::create([
             'name' => $request->nombres.' '.$request->apell_pat.' '.$request->apell_mat,
             'email' => $request->correo,
@@ -88,12 +97,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(encargado $enc)
     {
         $encargado=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                             ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                             ->select('encargado.*','entidad.nombre','tipo_entidad.tipo')
-                            ->where('correo',$user->email)->first();
+                            ->where('correo',$enc->id)->first();
+        $user=User::where('email',$enc->correo)->first();
         $roles=$user->getRoleNames();
         return view('users.show', compact('user','encargado','roles'));
     }
@@ -104,10 +114,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(encargado $encargado)
     {
         $roles = Role::get();
-        $encargado=encargado::where('correo',$user->email)->first();
+        $user=User::where('email',$encargado->correo)->first();
         $tipo_entidad=entidad::select('tipo_entidad_id as tipo')->where('id',$encargado->entidad_id)->first();
         $entidades = entidad::pluck('nombre','id');
         $tipo=tipo_entidad::get();
@@ -123,11 +133,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, encargado $encargado)
     {
-        $idencargado=encargado::where('correo', $user->email)->first();
+        $idencargado=$encargado;
+        $user=encargado::where('email', $encargado->correo)->first();
         $request->validate([
-            'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI,'.$idencargado->id,
+            'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI,'.$encargado->id,
             'apell_pat' => 'required',
             'nombres'=> 'required',
             'telefono'=> 'required|integer||min:000000000|max:999999999',
@@ -163,16 +174,34 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(encargado $encargado)
     {
-        $encargado=encargado::where('correo',$user->email)->first();
+        $user=User::where('email',$encargado->correo)->first();
         $user->delete();
-        $encargado->delete();
-        if ($user instanceof Model && $encargado instanceof Model) {
-            toastr()->info('Usuario eliminado correctamente!');
-            return redirect()->route('users.index');
+        $encargado=encargado::where('id', $encargado->id)->update(array(
+            'activo'    =>0, 
+            'borrado'   =>1
+        ));
+        $mensaje='Usuario eliminado correctamente!';
+        return $mensaje;
+    }
+    public function habilitar(Request $request)
+    {
+        $encargado=encargado::where('id',$request->id)->first();
+        $encarga=encargado::where('id', $encargado->id)->update(array(
+            'activo'    =>($request->bdr==1)?0:1
+        ));
+        if($request->bdr==1){//Deshabilitar
+            $user=User::where('email',$encargado->correo)->first();
+            $user->delete();
+        }else{//Habilitar
+            $user=User::create([
+                'name' => $encargado->nombres.' '.$encargado->apell_pat.' '.$encargado->apell_mat,
+                'email' => $encargado->correo,
+                'password' => Hash::make($encargado->DNI)
+            ])->assignRole('Encargado');
         }
-        toastr()->error('Ha ocurrido un error, por favor inténtelo nuevamente.');
-        return back();
+        $mensaje='El usuario '.$encargado->nombres.' ha sido '.(($request->bdr==1)?'deshabilitado':'habilitado').' ';
+        return $mensaje;
     }
 }

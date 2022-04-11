@@ -69,7 +69,13 @@
                         type: "POST",
                         data: {'_method': 'DELETE', '_token': csrf_token},
                         success: function(data) {
-                            alert(data);
+                            $(document).Toasts('create', {
+                                class: 'bg-succcess',
+                                title: 'Mensaje de Sistema',
+                                body: data,
+                                autohide: true,
+                                delay: 3350
+                            });
                             location.reload();
                             //alert(data.id +' - '+ data.name +' - ' + data.email +' - ' + data.password );
                         },
@@ -86,5 +92,54 @@
                 });
             });
         });
+        function habilitar(ids,aux) {
+            console.log(ids);
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-warning mr-1',
+                    cancelButton: 'btn btn-secondary mr-1'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Estas Seguro?',
+                text: "Esta accion es Irreversible!",
+                icon: (aux==1)?'warning':'success',
+                showCancelButton: true,
+                confirmButtonText: (aux==1)?'Deshabilitar':'Habilitar',
+                cancelButtonText: 'Cancelar!',
+                reverseButtons: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/users/habilitar',
+                        method: 'POST',
+                        data: {
+                            _token: $('input[name="_token"]').val(),
+                            id: ids,
+                            bdr: aux
+                        }
+                    }).done(function(msg) {
+                        console.log(msg);
+                        $(document).Toasts('create', {
+                            class: 'bg-'+((aux==1)?'warning':'success'),
+                            title: 'Mensaje de Sistema',
+                            body: msg,
+                            autohide: true,
+                            delay: 3350
+                        });
+                        location.reload();
+                    }).fail(function(msg) {
+                        console.log(msg);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Algo salio mal!...'
+                        })
+                    });
+                }
+            })
+        }
     </script>
 @stop

@@ -41,22 +41,23 @@ class HomeController extends Controller
     {
         return view('reportes');
     }
-    public function mostrarPDF(Request $request){
-        if($request->id==0){
-            // $fecha=entidad::select(/*'nombre',*/DB::raw('curdate() as fech'))/*->where('id',$request->id)*/->first();
-            // $encargados=entidad::join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
-            //     ->select('encargado.*','nombre','tipo')->get();
-            // $url='pdfs/General-'.$fecha->fech.'.pdf';
-            // $pdf = PDF::loadView ( 'PDFs.reporteGeneral' , compact('encargados','nSubEnt','nArea'));
-            // $pdf->save($url);
-            // $url='/'.$url;
-            // $dato = compact('url');
-        }else{
+    public function mostrarPDF($id){
+        // if($request->id==0){
+        //     // $fecha=entidad::select(/*'nombre',*/DB::raw('curdate() as fech'))/*->where('id',$request->id)*/->first();
+        //     // $encargados=entidad::join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
+        //     //     ->select('encargado.*','nombre','tipo')->get();
+        //     // $url='pdfs/General-'.$fecha->fech.'.pdf';
+        //     // $pdf = PDF::loadView ( 'PDFs.reporteGeneral' , compact('encargados','nSubEnt','nArea'));
+        //     // $pdf->save($url);
+        //     // $url='/'.$url;
+        //     // $dato = compact('url');
+        // }else{
             $fecha=entidad::select('nombre',DB::raw('curdate() as fech'))
-                            ->where('id',$request->id)->first();
+                            ->where('id',$id)->first();
             $encargados=encargado::join('entidad','encargado.entidad_id','entidad.id')
                 ->join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
-                ->select('encargado.*','nombre','tipo')->where('entidad.id',$request->id)->first();
+                ->select('encargado.*','nombre','tipo')->where('entidad.id',$id)
+                ->where('encargado.activo',1)->where('encargado.borrado',0)->first();
             $subEnts=subentidad::where('entidad_id',$encargados->entidad_id)->get();
             $tipos=DB::table('tipo')->get();
             $labs=subentidad::join('tipo','subentidad.tipo_id','tipo.id')
@@ -78,11 +79,13 @@ class HomeController extends Controller
                                     ->select('sft_predeterminado.*','tipo','periodo')->get();
             $url='pdfs/'.$fecha->nombre.' - '.$fecha->fech.'.pdf';
             $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('encargados','subEnts','tipos','labs','detalles','sftGenerales'));
-            $pdf->save($url);
+            //$pdf->save($url);
+            
             $entidad=$encargados->nombre;
             $url='/'.$url;
             $dato = compact('entidad','url'); 
-        }
-        return $dato;
+        // }
+        //return $dato;
+        return $pdf->download($fecha->nombre.' - '.$fecha->fech.'.pdf');
     }
 }

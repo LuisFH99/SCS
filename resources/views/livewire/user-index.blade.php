@@ -21,30 +21,35 @@
                             <th>Teléfono</th>
                             <th>Tipo</th>
                             <th>Entidad</th>
-                            <th width="320px"></th>
+                            <th>Estado</th>
+                            <th width="265px"></th>
                         </tr>
                     </thead>
                     <tbody>
                         
                         @foreach($users as $user)
                         <tr>
-                            <td>{{ $user->contador }}</td>
-                            <td>{{ $user->DNI }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->telefono }}</td>
-                            <td>{{ $user->tipo }}</td>
-                            <td>{{ $user->nombre }}</td>
-                            <td>
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-dark">
-                                    <i class="fas fa-fw fa-eye"></i>
-                                    Ver
+                            <td class="align-V">{{ $user->contador }}</td>
+                            <td class="align-V">{{ $user->DNI }}</td>
+                            <td class="align-V">{{ $user->nombres.' '.$user->apell_pat.' '.$user->apell_mat }}</td>
+                            <td class="align-V">{{ $user->correo }}</td>
+                            <td class="align-V">{{ $user->telefono }}</td>
+                            <td class="align-V">{{ $user->tipo }}</td>
+                            <td class="align-V">{{ $user->nombre }}</td>
+                            <td class="align-V"><span class="badge {{($user->activo ==1 )?'bg-success':'bg-danger'}}">{{($user->activo ==1 )?'Habilitado':'Deshabilitado'}}</span></td>
+                            <td class="align-V">
+                                <a class="btn btn-warning btn-sm" href="#" onclick="habilitar({{$user->id}},{{$user->activo}})" 
+                                        title="{{($user->activo ==1 )?'Deshabilitar':'Habilitar'}} Usuario">
+                                    <i class="fas fa-arrow-alt-circle-{{($user->activo ==1 )?'down':'up'}} whiterr"></i>
                                 </a>
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">
+                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-dark btn-sm" title="Ver Usuario">
+                                    <i class="fas fa-fw fa-eye"></i>
+                                </a>
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-fw fa-edit"></i>
                                     Editar
                                 </a>
-                                <button id="{{ $user->id }}" class="delete-button btn btn-danger">
+                                <button id="{{ $user->id }}" class="delete-button btn btn-danger btn-sm">
                                     <i class="fas fa-fw fa-trash"></i>
                                     Eliminar
                                 </button>

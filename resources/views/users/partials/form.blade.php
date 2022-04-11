@@ -71,7 +71,7 @@
         <div class="form-group">
             {{ Form::label('Entidad:', null, ['class' => 'control-label']) }}
             <div class="form-group">
-                <select name="entidad" id="entidad" class="form-control js-example-basic-single form-control" placeholder="Seleccionar..." required>
+                <select name="entidad" id="entidad" class="js-example-basic-single form-control" required>
 					@foreach ($tipo as $item)
 						<optgroup label="{{$item->tipo}}">
 							@foreach ($entidades1 as $entidad1)

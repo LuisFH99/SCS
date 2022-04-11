@@ -49,7 +49,7 @@ Route::resource('softwares', SoftwareController::class);
 Route::get('/softwares/{software}/tipo/{tipo}', [App\Http\Controllers\SoftwareController::class, 'edit1'])->name('softwares.edit1');
 
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->name('reportes');
-Route::post('/mostrarPDF', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
+Route::get('/mostrarPDF/{id}', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->name('mostrarPDF');
 Route::get('/sofwares', [ReportesController::class, 'ReportListSoftwares'])->name('ReportListSoftwares');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Encargado
@@ -57,5 +57,5 @@ Route::view('home', 'livewire.entidades.index')->name('home');
 Route::view('entidad/{id}', 'livewire.requerimiento.index')->name('requerimiento.index');
 //admin
 Route::view('entidades', 'livewire.admin.entidades.index')->name('admin.entidades.index');
-
+Route::post('/users/habilitar', [UserController::class, 'habilitar'])->name('users.habilitar');
 
