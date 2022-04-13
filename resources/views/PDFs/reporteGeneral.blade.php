@@ -107,9 +107,9 @@
     <main>
         <div>
             <h1 class="titulo">Centro de Costo</h1>
-            <h3 class="titulo">{{$encargados->nombre}}</h3><br>
+            <h3 class="titulo">{{$entidad->nombre}}</h3><br>
             <div>
-                <p>Sub Entidades: <b>{{$subEnts->count()-1}}</b></p>
+                <p>Sub Entidades: <b>{{$subEnts->count()}}</b></p>
             </div>
             <div name="divDETALLE">
                 @php
@@ -161,7 +161,7 @@
                                             <td class="the align-V">{{$detalle->nombre}}</td>
                                             <td class="titulo the align-V">{{$detalle->cantidad}}</td>
                                             <td class="the align-V"><a class="dis-in" 
-                                                href="{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}" target="_blank">
+                                                href="http://inventarioti.unasam.edu.pe/{{(!is_null($detalle->cotizacion)?$detalle->cotizacion:'#')}}" target="_blank">
                                                 {{(!is_null($detalle->cotizacion)?'Ver Cotización':'')}} </a></td>
                                             <td class="the align-V">{{$detalle->tipo}}</td>
                                             <td class="the align-V">{{$detalle->periodo}}</td>
@@ -188,15 +188,15 @@
                 @endforeach
             </div>
             <div>
-                <p><b>Monto Total</b> para la adquisición de Softwares de la <b>{{$encargados->nombre}}</b> asciende a <b>S/. {{number_format($totalEnt,2)}}</b></p>
+                <p><b>Monto Total</b> para la adquisición de Softwares de la <b>{{$entidad->nombre}}</b> asciende a <b>S/. {{number_format($totalEnt,2)}}</b></p>
             </div>
             <br><br>
             <div class="Row titulo">
                 <div class="Column titulo">
                     <p class="titulo dis-in">________________________________________</p><br>
-                    <p class="titulo dis-in"><b>{{strtoupper($encargados->nombres.' '.$encargados->apell_pat.' '.$encargados->apell_mat)}}</b></p><br>
-                    <p class="titulo dis-in">DNI N° <b>{{$encargados->DNI}}</b></p><br>
-                    <div class="Column titulo dis-in anc-1"><p class="titulo dis-in">{{strtoupper('Encargado de la '.$encargados->nombre)}}</p><br></div>
+                    <p class="titulo dis-in"><b>{{(!is_null($encargados))?strtoupper($encargados->nombres.' '.$encargados->apell_pat.' '.$encargados->apell_mat):''}}</b></p><br>
+                    <p class="titulo dis-in">DNI N° <b>{{(!is_null($encargados))?$encargados->DNI:''}}</b></p><br>
+                    <div class="Column titulo dis-in anc-1"><p class="titulo dis-in">{{strtoupper('Encargado de la '.$entidad->nombre)}}</p><br></div>
                 </div>
             </div>
         </div>

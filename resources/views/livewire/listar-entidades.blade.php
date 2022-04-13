@@ -31,7 +31,7 @@
                             <td>{{ $encargado->nombre }}</td>
                             <td>{{ $encargado->tipo }}</td>
                             <td>{{ $encargado->nombres.' '.$encargado->apell_pat.' '.$encargado->apell_mat}}</td>
-                            <td width="120px">
+                            <td width="140px">
                                 <a href="{{route('mostrarPDF',$encargado->entidad_id)}}" class="btn btn-dark btn-sm" onclick="imprimir({{$encargado->entidad_id}},1)">
                                     <i class="fas fa-fw fa-eye"></i>
                                     Descargar

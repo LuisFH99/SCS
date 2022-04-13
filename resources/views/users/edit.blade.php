@@ -28,7 +28,7 @@
                     Editar Usuario
                 </div>
                 <div class="card-body">
-                    {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'PUT']) !!}
+                    {!! Form::model($encargado, ['route' => ['users.update', $encargado->id], 'method' => 'PUT']) !!}
                         @csrf
                         @include('users.partials.form-edit')
                     {!! Form::close() !!}
@@ -63,12 +63,31 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
+            $('#correo').focus(function() {
+                $(this).val("" + generaremail($('#nombres').val().trim(), $('#apell_pat').val().trim().replace(/ /g, ""), 
+                    $('#apell_mat').val().trim()));
+            });
         });
         function SoloNumeros(e){
             var key= Window.Event? e.which : e.keyCode;
             if (key < 48 || key > 57) { 
                 e.preventDefault();
             }
-        };
+        }; 
+        function generaremail(nom, ap, am) {
+            let dto = nom.charAt(0).replace('ñ', 'n') + ap.replace('ñ', 'n') + am.charAt(0).replace('ñ', 'n') + "@unasam.edu.pe";
+            return dto.toLowerCase();
+        }
+
+        function selecNombre(nombre){
+            document.getElementById('exampleModalLabel').innerHTML=""+nombre;
+        }
+        function generaremail1() {
+            let nom=$.trim($('#nombres').val());
+            let ap=$.trim($('#apepat'));
+            let am=$.trim($('#apemat'));
+            let dto = ""+nom.charAt(0) + ap + am.charAt(0) + "@unasam.edu.pe";
+            $('#email').val(dto.toLowerCase());
+        }
     </script>
 @stop

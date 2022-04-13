@@ -68,13 +68,32 @@
                 allowClear: true
             });
             $('.js-example-basic-single').val(null).trigger('change');
+            $('#correo').focus(function() {
+                $(this).val("" + generaremail($('#nombres').val().trim(), $('#apell_pat').val().trim().replace(/ /g, ""), 
+                    $('#apell_mat').val().trim()));
+            });
         });
+        function generaremail(nom, ap, am) {
+            let dto = nom.charAt(0).replace('ñ', 'n') + ap.replace('ñ', 'n') + am.charAt(0).replace('ñ', 'n') + "@unasam.edu.pe";
+            return dto.toLowerCase();
+        }
+
+        function selecNombre(nombre){
+            document.getElementById('exampleModalLabel').innerHTML=""+nombre;
+        }
+        function generaremail1() {
+            let nom=$.trim($('#nombres').val());
+            let ap=$.trim($('#apepat'));
+            let am=$.trim($('#apemat'));
+            let dto = ""+nom.charAt(0) + ap + am.charAt(0) + "@unasam.edu.pe";
+            $('#email').val(dto.toLowerCase());
+        }
         function SoloNumeros(e){
             var key= Window.Event? e.which : e.keyCode;
             if (key < 48 || key > 57) { 
                 e.preventDefault();
             }
-        };
+        }; 
     </script>
 @stop
 

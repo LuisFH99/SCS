@@ -35,12 +35,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::get();
+       
         $entidades = entidad::pluck('nombre','id');
         $tipo=tipo_entidad::get();
         $entidades1 = entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
-        return view('users.create', compact('roles','entidades','entidades1','tipo'));
+        return view('users.create', compact('entidades','entidades1','tipo'));
     }
 
     /**
@@ -81,7 +81,7 @@ class UserController extends Controller
             'name' => $request->nombres.' '.$request->apell_pat.' '.$request->apell_mat,
             'email' => $request->correo,
             'password' => Hash::make($request->DNI)
-        ])->assignRole($request->roles);
+        ])->assignRole('Encargado');
         
         if ($user instanceof Model && $encargado instanceof Model) {
             toastr()->success('Usuario registrado correctamente!');
@@ -97,15 +97,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(encargado $enc)
+    public function show($enc)
     {
         $encargado=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                             ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                             ->select('encargado.*','entidad.nombre','tipo_entidad.tipo')
-                            ->where('correo',$enc->id)->first();
-        $user=User::where('email',$enc->correo)->first();
-        $roles=$user->getRoleNames();
-        return view('users.show', compact('user','encargado','roles'));
+                            ->where('encargado.id',$enc)->first();
+        return view('users.show', compact('encargado'));
     }
 
     /**
@@ -114,16 +112,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(encargado $encargado)
+    public function edit($enc)
     {
-        $roles = Role::get();
+        
+        $encargado=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
+                            ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
+                            ->select('encargado.*','entidad.nombre','tipo_entidad.tipo')
+                            ->where('encargado.id',$enc)->first();
         $user=User::where('email',$encargado->correo)->first();
         $tipo_entidad=entidad::select('tipo_entidad_id as tipo')->where('id',$encargado->entidad_id)->first();
         $entidades = entidad::pluck('nombre','id');
         $tipo=tipo_entidad::get();
         $entidades1 = entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
-        return view('users.edit', compact('user', 'roles','encargado','tipo_entidad','entidades','entidades1','tipo'));
+        return view('users.edit', compact('user', 'encargado','tipo_entidad','entidades','entidades1','tipo'));
     }
 
     /**
@@ -133,12 +135,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, encargado $encargado)
+    public function update(Request $request, $id)
     {
-        $idencargado=$encargado;
-        $user=encargado::where('email', $encargado->correo)->first();
+        $idencargado=encargado::where('id',$id)->first();
+        $user=User::where('email', $idencargado->correo)->first();
         $request->validate([
-            'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI,'.$encargado->id,
+            'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI,'.$idencargado->id,
             'apell_pat' => 'required',
             'nombres'=> 'required',
             'telefono'=> 'required|integer||min:000000000|max:999999999',
@@ -159,13 +161,14 @@ class UserController extends Controller
             'email' => $request->correo,
             'password' => Hash::make($request->DNI)
         ));
-        User::where('id',$user->id)->first()->roles()->sync($request->roles);
+        User::where('id',$user->id)->first()->roles()->sync('Encargado');
         if ($users == 1 && $encargado == 1) {
             toastr()->success('Usuario editado correctamente!');
             return redirect()->route('users.index');
         }
         toastr()->error('Ha ocurrido un error, por favor inténtelo nuevamente.');
         return back();
+        //return compact('id','idencargado','user','request');
     }
 
     /**
@@ -174,8 +177,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(encargado $encargado)
+    public function destroy($enc)
     {
+        $encargado=encargado::where('id',$enc)->first();
         $user=User::where('email',$encargado->correo)->first();
         $user->delete();
         $encargado=encargado::where('id', $encargado->id)->update(array(
@@ -194,7 +198,7 @@ class UserController extends Controller
         if($request->bdr==1){//Deshabilitar
             $user=User::where('email',$encargado->correo)->first();
             $user->delete();
-        }else{//Habilitar
+        }else{//Habilitar 
             $user=User::create([
                 'name' => $encargado->nombres.' '.$encargado->apell_pat.' '.$encargado->apell_mat,
                 'email' => $encargado->correo,

@@ -58,11 +58,13 @@ class HomeController extends Controller
                 ->join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
                 ->select('encargado.*','nombre','tipo')->where('entidad.id',$id)
                 ->where('encargado.activo',1)->where('encargado.borrado',0)->first();
-            $subEnts=subentidad::where('entidad_id',$encargados->entidad_id)->get();
+            $entidad=entidad::join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
+                ->select('entidad.*','tipo')->where('entidad.id',$id)->first();
+            $subEnts=subentidad::where('entidad_id',$entidad->id)->get();
             $tipos=DB::table('tipo')->get();
             $labs=subentidad::join('tipo','subentidad.tipo_id','tipo.id')
                             ->select('nom_tip')
-                            ->where('entidad_id',$encargados->entidad_id)->groupBy('nom_tip')->get();
+                            ->where('entidad_id',$entidad->id)->groupBy('nom_tip')->get();
             $detalles=DetalleRequerimiento::join('subentidad','requerimiento.subentidad_id','subentidad.id')
                                         ->join('entidad','subentidad.entidad_id','entidad.id')
                                         ->join('det_software','requerimiento.det_software_id','det_software.id')
@@ -72,16 +74,16 @@ class HomeController extends Controller
                                         ->select('requerimiento.*','entidad.nombre as enti','subentidad.nombre as subenti',
                                                 'sft_especializado.nombre','sft_especializado.nombre as sft_nom', 
                                                 'sft_especializado.año as anio', 'version', 'tipo_licencia_id','tipo','periodo')
-                                        ->where('entidad.id',$encargados->entidad_id)->get();
+                                        ->where('entidad.id',$entidad->id)->get();
             $sftGenerales=DB::table('sft_predeterminado')
                                     ->join('tipo_licencia','sft_predeterminado.tipo_licencia_id','tipo_licencia.id')
                                     ->join('periodo','sft_predeterminado.periodo_id','periodo.id')
                                     ->select('sft_predeterminado.*','tipo','periodo')->get();
             $url='pdfs/'.$fecha->nombre.' - '.$fecha->fech.'.pdf';
-            $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('encargados','subEnts','tipos','labs','detalles','sftGenerales'));
+            $pdf = PDF::loadView ('PDFs.reporteGeneral' , compact('entidad','encargados','subEnts','tipos','labs','detalles','sftGenerales'));
             //$pdf->save($url);
             
-            $entidad=$encargados->nombre;
+            $entidad=$entidad->nombre;
             $url='/'.$url;
             $dato = compact('entidad','url'); 
         // }

@@ -30,6 +30,7 @@ Auth::routes(['register'=>false]);
 Route::resource('users', UserController::class)->middleware('can:admin.users.index');
 Route::resource('softwares', SoftwareController::class)->middleware('can:admin.users.index');
 Route::get('/softwares/{software}/tipo/{tipo}', [App\Http\Controllers\SoftwareController::class, 'edit1'])->middleware('can:admin.users.index')->name('softwares.edit1');
+Route::post('/users/habilitar', [App\Http\Controllers\Admin\UserController::class, 'habilitar'])->middleware('can:admin.users.index')->name('users.habilitar');
 
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->middleware('can:admin.users.index')->name('reportes');
 Route::get('/mostrarPDF/{id}', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->middleware('can:admin.home')->name('mostrarPDF');

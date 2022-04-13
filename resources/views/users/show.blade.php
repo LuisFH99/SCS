@@ -3,7 +3,7 @@
 @section('title', 'Ver de Usuarios')
 
 @section('content_header')
-    <h1>Ver Usuarios</h1>
+    <h1>Ver Usuarios</h1> 
 @stop
 
 @section('content')
@@ -29,19 +29,16 @@
                 </div>
                 <div class="card-body">
                     <p>
-                        <strong>Nombre: </strong> {{ $user->name }}
+                        <strong>Nombre: </strong> {{ $encargado->nombres.' '.$encargado->ape_pat.' '.$encargado->ape_mat }}
                     </p>
                     <p>
                         <strong>DNI: </strong> {{ $encargado->DNI }}
                     </p>
                     <p>
-                        <strong>Email: </strong> {{ $user->email }}
+                        <strong>Email: </strong> {{ $encargado->correo }}
                     </p>
                     <p>
                         Encargado de la <strong>{{ $encargado->tipo }}</strong> de <strong>{{ $encargado->nombre }}</strong> 
-                    </p>
-                    <p>
-                        <strong>Roles: </strong> @foreach ($roles as $role ) {{' '.$role}}@endforeach
                     </p>
                 </div>
                 <div class="text-right p-0 pr-3 pb-3">

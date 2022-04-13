@@ -91,7 +91,9 @@
                 }
                 });
             });
+            
         });
+        
         function habilitar(ids,aux) {
             console.log(ids);
             const swalWithBootstrapButtons = Swal.mixin({
@@ -142,4 +144,4 @@
             })
         }
     </script>
-@stop
+@stop 

@@ -21,7 +21,7 @@ class UserIndex extends Component
     }
     public function render()
     {
-        $users=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
+        $encargados=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                     ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                     ->select('encargado.*','entidad.nombre','tipo_entidad.tipo',DB::raw('@i := @i + 1 as contador'))
                     ->crossJoin(DB::raw('(select @i := 0) as r'))
@@ -32,7 +32,7 @@ class UserIndex extends Component
                         ->orWhere('DNI','LIKE','%'.$this->search.'%')
                         ->orWhere('telefono','LIKE','%'.$this->search.'%');
                     })
-                   ->paginate();
-        return view('livewire.user-index',compact('users'));
+                   ->paginate(); 
+        return view('livewire.user-index',compact('encargados'));
     }
 }

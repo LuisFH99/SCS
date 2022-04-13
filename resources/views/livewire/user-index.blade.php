@@ -8,7 +8,7 @@
             </span>
         </div>
     </div>
-    @if($users->count())
+    @if($encargados->count())
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped" id="table">
@@ -27,29 +27,29 @@
                     </thead>
                     <tbody>
                         
-                        @foreach($users as $user)
+                        @foreach($encargados as $encargado)
                         <tr>
-                            <td class="align-V">{{ $user->contador }}</td>
-                            <td class="align-V">{{ $user->DNI }}</td>
-                            <td class="align-V">{{ $user->nombres.' '.$user->apell_pat.' '.$user->apell_mat }}</td>
-                            <td class="align-V">{{ $user->correo }}</td>
-                            <td class="align-V">{{ $user->telefono }}</td>
-                            <td class="align-V">{{ $user->tipo }}</td>
-                            <td class="align-V">{{ $user->nombre }}</td>
-                            <td class="align-V"><span class="badge {{($user->activo ==1 )?'bg-success':'bg-danger'}}">{{($user->activo ==1 )?'Habilitado':'Deshabilitado'}}</span></td>
+                            <td class="align-V">{{ $encargado->contador }}</td>
+                            <td class="align-V">{{ $encargado->DNI }}</td>
+                            <td class="align-V">{{ $encargado->nombres.' '.$encargado->apell_pat.' '.$encargado->apell_mat }}</td>
+                            <td class="align-V">{{ $encargado->correo }}</td>
+                            <td class="align-V">{{ $encargado->telefono }}</td>
+                            <td class="align-V">{{ $encargado->tipo }}</td>
+                            <td class="align-V">{{ $encargado->nombre }}</td>
+                            <td class="align-V"><span class="badge {{($encargado->activo ==1 )?'bg-success':'bg-danger'}}">{{($encargado->activo ==1 )?'Habilitado':'Deshabilitado'}}</span></td>
                             <td class="align-V">
-                                <a class="btn btn-warning btn-sm" href="#" onclick="habilitar({{$user->id}},{{$user->activo}})" 
-                                        title="{{($user->activo ==1 )?'Deshabilitar':'Habilitar'}} Usuario">
-                                    <i class="fas fa-arrow-alt-circle-{{($user->activo ==1 )?'down':'up'}} whiterr"></i>
+                                <a class="btn btn-warning btn-sm" href="#" onclick="habilitar({{$encargado->id}},{{$encargado->activo}})" 
+                                        title="{{($encargado->activo ==1 )?'Deshabilitar':'Habilitar'}} Usuario">
+                                    <i class="fas fa-arrow-alt-circle-{{($encargado->activo ==1 )?'down':'up'}} whiterr"></i>
                                 </a>
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-dark btn-sm" title="Ver Usuario">
+                                <a href="{{ route('users.show', $encargado->id) }}" class="btn btn-dark btn-sm" title="Ver Usuario">
                                     <i class="fas fa-fw fa-eye"></i>
                                 </a>
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('users.edit', $encargado->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-fw fa-edit"></i>
                                     Editar
                                 </a>
-                                <button id="{{ $user->id }}" class="delete-button btn btn-danger btn-sm">
+                                <button id="{{ $encargado->id }}" class="delete-button btn btn-danger btn-sm">
                                     <i class="fas fa-fw fa-trash"></i>
                                     Eliminar
                                 </button>
@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="card-footer">
-            {{$users->links()}}
+            {{$encargados->links()}}
         </div>
     @else
         <div class="card-body">
