@@ -4,8 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\encargado;
-use App\Models\entidad;
+use App\Models\Encargado;
+use App\Models\Entidad;
 use App\Models\tipo_entidad;
 
 class ListarEntidades extends Component
@@ -18,9 +18,9 @@ class ListarEntidades extends Component
     }
     public function render()
     {
-        $entidades = entidad::pluck('nombre','id');
+        $entidades = Entidad::pluck('nombre','id');
         $tipos = tipo_entidad::pluck('tipo','id');
-        $encargados=encargado::join('entidad','encargado.entidad_id','entidad.id')
+        $encargados=Encargado::join('entidad','encargado.entidad_id','entidad.id')
                                 ->join('tipo_entidad','entidad.tipo_entidad_id','tipo_entidad.id')
                                 ->select('encargado.*','entidad.nombre','tipo')
                                 ->where('nombres','LIKE','%'.$this->search.'%')

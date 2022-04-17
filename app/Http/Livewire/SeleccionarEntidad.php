@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\entidad;
+use App\Models\Entidad;
 use App\Models\tipo_entidad;
 use Livewire\WithPagination;
 
@@ -20,7 +20,7 @@ class SeleccionarEntidad extends Component
     public function render()
     {
         $tipo_entidades=tipo_entidad::pluck('tipo','id');
-        $entidades = entidad::where('tipo_entidad_id', '=', $this->selecttipo)->pluck('nombre','id');
+        $entidades = Entidad::where('tipo_entidad_id', '=', $this->selecttipo)->pluck('nombre','id');
         $selectentidad=$this->selectentidad;
         return view('livewire.seleccionar-entidad',compact('tipo_entidades','entidades','selectentidad'));
     }
