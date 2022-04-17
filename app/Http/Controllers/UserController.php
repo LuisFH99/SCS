@@ -8,9 +8,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
-use App\Models\encargado;
-use App\Models\entidad;
-use App\Models\tipo_entidad;
+use App\Models\Encargado;
+use App\Models\Entidad;
+use App\Models\Tipo_entidad;
 
 class UserController extends Controller
 {
@@ -36,9 +36,9 @@ class UserController extends Controller
     public function create()
     {
        
-        $entidades = entidad::pluck('nombre','id');
-        $tipo=tipo_entidad::get();
-        $entidades1 = entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
+        $entidades = Entidad::pluck('nombre','id');
+        $tipo=Tipo_entidad::get();
+        $entidades1 = Entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
         return view('users.create', compact('entidades','entidades1','tipo'));
     }
@@ -59,9 +59,9 @@ class UserController extends Controller
             'correo'=> 'required|email|unique:users,email|regex:/(.*)@unasam\.edu\.pe$/i',
             'entidad'=> 'required|integer',
         ]);
-        $enca=encargado::where('DNI', $request->DNI)->get()->count();
+        $enca=Encargado::where('DNI', $request->DNI)->get()->count();
         if($enca==0){
-            $encargado=encargado::create([
+            $encargado=Encargado::create([
                 'DNI'       =>$request->DNI,
                 'nombres'   =>$request->nombres,
                 'apell_pat' =>$request->apell_pat,
@@ -73,7 +73,7 @@ class UserController extends Controller
                 'borrado'   =>0
             ]);
         }else{
-            $encargado=encargado::where('DNI', $request->DNI)->update(array(
+            $encargado=Encargado::where('DNI', $request->DNI)->update(array(
                 'activo'=>1,'borrado'=>0
             ));
         }
@@ -99,7 +99,7 @@ class UserController extends Controller
      */
     public function show($enc)
     {
-        $encargado=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
+        $encargado=Encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                             ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                             ->select('encargado.*','entidad.nombre','tipo_entidad.tipo')
                             ->where('encargado.id',$enc)->first();
@@ -115,15 +115,15 @@ class UserController extends Controller
     public function edit($enc)
     {
         
-        $encargado=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
+        $encargado=Encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                             ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                             ->select('encargado.*','entidad.nombre','tipo_entidad.tipo')
                             ->where('encargado.id',$enc)->first();
         $user=User::where('email',$encargado->correo)->first();
-        $tipo_entidad=entidad::select('tipo_entidad_id as tipo')->where('id',$encargado->entidad_id)->first();
-        $entidades = entidad::pluck('nombre','id');
-        $tipo=tipo_entidad::get();
-        $entidades1 = entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
+        $tipo_entidad=Entidad::select('tipo_entidad_id as tipo')->where('id',$encargado->entidad_id)->first();
+        $entidades = Entidad::pluck('nombre','id');
+        $tipo=Tipo_entidad::get();
+        $entidades1 = Entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
         return view('users.edit', compact('user', 'encargado','tipo_entidad','entidades','entidades1','tipo'));
     }
@@ -137,7 +137,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $idencargado=encargado::where('id',$id)->first();
+        $idencargado=Encargado::where('id',$id)->first();
         $user=User::where('email', $idencargado->correo)->first();
         $request->validate([
             'DNI' => 'required|min:00000000|max:99999999|unique:encargado,DNI,'.$idencargado->id,
@@ -147,7 +147,7 @@ class UserController extends Controller
             'correo'=> 'required|email|regex:/(.*)@unasam\.edu\.pe$/i|unique:users,email,'.$user->id,
             'entidad'=> 'required|integer',
         ]);
-        $encargado=encargado::where('id', $idencargado->id)->update(array(
+        $encargado=Encargado::where('id', $idencargado->id)->update(array(
             'DNI'       =>$request->DNI, 
             'nombres'   =>$request->nombres, 
             'apell_pat' =>$request->apell_pat, 
@@ -179,10 +179,10 @@ class UserController extends Controller
      */
     public function destroy($enc)
     {
-        $encargado=encargado::where('id',$enc)->first();
+        $encargado=Encargado::where('id',$enc)->first();
         $user=User::where('email',$encargado->correo)->first();
         $user->delete();
-        $encargado=encargado::where('id', $encargado->id)->update(array(
+        $encargado=Encargado::where('id', $encargado->id)->update(array(
             'activo'    =>0, 
             'borrado'   =>1
         ));
@@ -191,8 +191,8 @@ class UserController extends Controller
     }
     public function habilitar(Request $request)
     {
-        $encargado=encargado::where('id',$request->id)->first();
-        $encarga=encargado::where('id', $encargado->id)->update(array(
+        $encargado=Encargado::where('id',$request->id)->first();
+        $encarga=Encargado::where('id', $encargado->id)->update(array(
             'activo'    =>($request->bdr==1)?0:1
         ));
         if($request->bdr==1){//Deshabilitar

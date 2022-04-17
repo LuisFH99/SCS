@@ -98,5 +98,5 @@
     <a href="{{ route('users.index') }}" class="btn btn-danger">
         <i class="fas fa-fw fa-arrow-left"></i>
         Retornar
-    </a>
+    </a> 
 </div>

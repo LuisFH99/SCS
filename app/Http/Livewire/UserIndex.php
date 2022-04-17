@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\encargado;
+use App\Models\Encargado;
 
 class UserIndex extends Component
 {
@@ -21,7 +21,7 @@ class UserIndex extends Component
     }
     public function render()
     {
-        $encargados=encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
+        $encargados=Encargado::join('entidad', 'encargado.entidad_id', '=', 'entidad.id')
                     ->join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                     ->select('encargado.*','entidad.nombre','tipo_entidad.tipo',DB::raw('@i := @i + 1 as contador'))
                     ->crossJoin(DB::raw('(select @i := 0) as r'))
