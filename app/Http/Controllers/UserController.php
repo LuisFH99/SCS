@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\Encargado;
 use App\Models\Entidad;
-use App\Models\Tipo_entidad;
+use App\Models\tipo_entidad;
 
 class UserController extends Controller
 {
@@ -37,7 +37,7 @@ class UserController extends Controller
     {
        
         $entidades = Entidad::pluck('nombre','id');
-        $tipo=Tipo_entidad::get();
+        $tipo=tipo_entidad::get();
         $entidades1 = Entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
         return view('users.create', compact('entidades','entidades1','tipo'));
@@ -122,7 +122,7 @@ class UserController extends Controller
         $user=User::where('email',$encargado->correo)->first();
         $tipo_entidad=Entidad::select('tipo_entidad_id as tipo')->where('id',$encargado->entidad_id)->first();
         $entidades = Entidad::pluck('nombre','id');
-        $tipo=Tipo_entidad::get();
+        $tipo=tipo_entidad::get();
         $entidades1 = Entidad::join('tipo_entidad', 'entidad.tipo_entidad_id', '=', 'tipo_entidad.id')
                                 ->select('entidad.*','tipo_entidad.id as idt','tipo_entidad.tipo')->get();
         return view('users.edit', compact('user', 'encargado','tipo_entidad','entidades','entidades1','tipo'));
