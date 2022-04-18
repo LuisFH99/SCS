@@ -13,9 +13,17 @@
             <div class="card mt-4">
                 <div class="card-header">
                     Reporte General
-                    <a href="{{route('ReportListSoftwares')}}" class="btn btn-primary float-right" onclick="imprimir(0,0)" target="_blank">
-                        <i class="fa fa-file"></i>
+                    <a href="{{route('mostrarPDF',-1)}}" class="btn btn-secondary float-right mr-1" target="_blank">
+                        <i class="fa fa-list-alt"></i>
+                        Resumen
+                    </a>
+                    <a href="{{route('mostrarPDF',0)}}" class="btn btn-primary float-right mr-1" target="_blank">
+                        <i class="fa fa-list-alt"></i>
                         Reporte General
+                    </a>
+                    <a href="{{route('ReportListSoftwares')}}" class="btn btn-warning float-right mr-1" target="_blank">
+                        <i class="fa fa-file"></i>
+                        Reporte Softwares
                     </a>
                 </div>
                 @livewire('listar-entidades')

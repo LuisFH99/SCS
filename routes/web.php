@@ -34,7 +34,6 @@ Route::post('/users/habilitar', [App\Http\Controllers\Admin\UserController::clas
 
 Route::get('/reportes', [App\Http\Controllers\HomeController::class, 'index1'])->middleware('can:admin.users.index')->name('reportes');
 Route::get('/mostrarPDF/{id}', [App\Http\Controllers\HomeController::class, 'mostrarPDF'])->middleware('can:admin.home')->name('mostrarPDF');
-Route::get('/mostrarPDFgen/', [App\Http\Controllers\HomeController::class, 'mostrarPDFgen'])->middleware('can:admin.home')->name('mostrarPDFgen');
 Route::get('/sofwares', [ReportesController::class, 'ReportListSoftwares'])->middleware('can:admin.users.index')->name('ReportListSoftwares');
 Route::middleware(['auth'])->group(function () {
     //Encargado
